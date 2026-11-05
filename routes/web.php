@@ -9,6 +9,7 @@ use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PemesananController;
 
+
 /*
 |--------------------------------------------------------------------------
 | LOGIN & LOGOUT
@@ -52,17 +53,12 @@ Route::middleware('ceklogin')->group(function () {
     });
 
     /* LAPORAN (Khusus Manager) */
-    Route::middleware('role:manager')->group(function () {
+    Route::middleware('role:manager,kasir')->group(function () {
         Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
     });
 
 });
-
-/*
-|--------------------------------------------------------------------------
-| ROOT
-|--------------------------------------------------------------------------
-*/
+   
 
 Route::get('/', function () {
     return redirect()->route('login');

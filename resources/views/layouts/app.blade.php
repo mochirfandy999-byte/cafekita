@@ -20,6 +20,7 @@
             font-family: "Segoe UI", Arial, sans-serif;
         }
 
+        /* Sidebar Styling */
         .sidebar {
             position: fixed;
             top: 0;
@@ -30,7 +31,7 @@
             overflow-y: auto;
             background: linear-gradient(160deg, #1f3929, #304e3a);
             color: #fff;
-            z-index: 1000;
+            z-index: 1030;
         }
 
         .sidebar-brand {
@@ -83,6 +84,8 @@
             display: flex;
             flex-direction: column;
             gap: 5px;
+            padding: 0;
+            margin: 0;
         }
 
         .sidebar-menu a,
@@ -90,9 +93,11 @@
             display: flex;
             align-items: center;
             gap: 13px;
+            width: 100%;
             padding: 12px 14px;
             border: 0;
             border-radius: 12px;
+            background: transparent;
             color: rgba(255, 255, 255, 0.72);
             font-size: 14px;
             font-weight: 500;
@@ -108,7 +113,8 @@
             text-align: center;
         }
 
-        .sidebar-menu a:hover {
+        .sidebar-menu a:hover,
+        .logout-menu button:hover {
             background: rgba(255, 255, 255, 0.09);
             color: #fff;
             transform: translateX(2px);
@@ -130,38 +136,34 @@
             border-top: 1px solid rgba(255, 255, 255, 0.10);
         }
 
+        .logout-menu form {
+            margin: 0;
+        }
+
         .logout-menu button {
-            width: 100%;
-            background: transparent;
             cursor: pointer;
         }
 
         .logout-menu button:hover {
-            background: rgba(255, 255, 255, 0.08);
             color: #ffb0b0;
         }
 
+        /* Area Konten Utama */
         .main-content {
             min-height: 100vh;
             margin-left: 260px;
-            padding: 25px 32px 35px;
+            transition: margin-left 0.25s ease;
         }
 
+        /* Topbar Putih Memanjang */
         .topbar {
-            min-height: 70px;
+            height: 75px;
+            background: #ffffff;
+            border-bottom: 1px solid #e9ecef;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-            margin-bottom: 28px;
-        }
-
-        .page-title h1 {
-            margin: 0;
-            color: #202923;
-            font-size: 27px;
-            font-weight: 750;
-            letter-spacing: -0.5px;
+            justify-content: flex-end;
+            padding: 0 35px;
         }
 
         .user-profile {
@@ -210,6 +212,11 @@
             text-transform: uppercase;
         }
 
+        /* INI BAHAGIAN YANG DITAMBAH: Ruang untuk kandungan supaya tidak rapat ke sidebar */
+        .page-content {
+            padding: 30px 35px;
+        }
+
         .main-card {
             border: 1px solid #eef2f0;
             border-radius: 12px;
@@ -226,6 +233,11 @@
             color: #fff;
         }
 
+        .sidebar-toggle,
+        .sidebar-backdrop {
+            display: none;
+        }
+
         @media (max-width: 992px) {
             .sidebar {
                 width: 220px;
@@ -233,37 +245,67 @@
 
             .main-content {
                 margin-left: 220px;
-                padding: 22px;
             }
         }
 
         @media (max-width: 768px) {
-            .sidebar {
-                position: relative;
-                width: 100%;
-                height: auto;
-                min-height: auto;
-                border-radius: 0 0 20px 20px;
+            body.app-with-sidebar {
+                padding: 66px 0 0; 
             }
 
-            .sidebar-brand {
-                padding-bottom: 20px;
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.25s ease;
+                width: 260px;
+            }
+
+            .sidebar.is-open {
+                transform: translateX(0);
             }
 
             .main-content {
                 margin-left: 0;
-                padding: 20px 15px;
             }
 
             .topbar {
-                align-items: flex-start;
-                flex-direction: column;
+                padding: 0 20px;
+            }
+            
+            /* Sesuaikan ruang kandungan untuk paparan mudah alih (mobile) */
+            .page-content {
+                padding: 20px 15px;
+            }
+
+            .sidebar-toggle {
+                position: fixed;
+                top: 14px;
+                left: 14px;
+                z-index: 1031;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 44px;
+                height: 44px;
+                border: 0;
+                border-radius: 12px;
+                background: #1f3929;
+                color: #fff;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+                font-size: 24px;
+            }
+
+            .sidebar-backdrop.is-visible {
+                position: fixed;
+                inset: 0;
+                z-index: 1029;
+                display: block;
+                background: rgba(0, 0, 0, 0.45);
             }
         }
 
         @media (max-width: 480px) {
             .user-profile {
-                width: 100%;
+                width: auto;
             }
         }
     </style>
@@ -273,17 +315,13 @@
 
     <main class="main-content">
         <header class="topbar">
-            <div class="page-title">
-                <h1>@yield('page-title', trim($__env->yieldContent('title', 'CafeKita')))</h1>
-            </div>
-
             <div class="user-profile">
                 <div class="user-avatar">
                     <i class="bi bi-person-fill"></i>
                 </div>
                 <div class="user-info">
-                    <strong>{{ auth()->user()->nama }}</strong>
-                    <span>{{ str_replace('_', ' ', auth()->user()->role) }}</span>
+                    <strong>{{ auth()->user()->nama ?? 'Kasir CafeKita' }}</strong>
+                    <span>{{ str_replace('_', ' ', auth()->user()->role ?? 'Kasir') }}</span>
                 </div>
             </div>
         </header>

@@ -7,39 +7,58 @@ use App\Models\Pemesanan;
 use App\Models\DetailPemesanan;
 use App\Models\Pembayaran;
 use App\Models\Menu;
+use App\Models\Reservasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class PemesananController extends Controller
 {
-    /**
-     * Menampilkan semua pemesanan.
-     */
-    public function index()
-    {
-        $pemesanans = Pemesanan::with(['user', 'meja'])
-            ->latest()
-            ->get();
+  public function index()
+{
+    // Ganti $pemesanans menjadi $semuaPesanan
+    $semuaPesanan = Pemesanan::with(['meja', 'user'])->latest()->get();
 
-        return view('pemesanans.index', compact('pemesanans'));
-    }
+    $reservasis = Reservasi::with('meja')->latest()->get();
 
+    $totalPemesanan = $semuaPesanan->count();
+    $totalReservasi = $reservasis->count();
+    $pemesananSelesai = $semuaPesanan->where('status', 'selesai')->count();
+    $totalPendapatan = Pembayaran::where('status', 'lunas')->sum('total_bayar');
+    $reservasiBatal   = $reservasis->where('status', 'Dibatalkan')->count();
+
+    return view('pemesanans.index', compact(
+        'semuaPesanan', 
+        'reservasis', 
+        'totalPemesanan', 
+        'totalReservasi', 
+        'pemesananSelesai', 
+        'totalPendapatan',
+        'reservasiBatal'
+    ));
+}
     public function detailPemesanans()
 {
     return $this->hasMany(DetailPemesanan::class, 'pemesanan_id');
 }
 
-    /**
-     * Form tambah pemesanan.
-     */
-    public function create()
-{
-    // Hanya tampilkan meja yang statusnya 'tersedia'
-    $mejas = Meja::where('status', 'tersedia')->get();
-    $menus = Menu::all();
+     public function create(Request $request)
+    {
+        $reservasi = null;
+        if ($request->filled('reservasi_id')) {
+            $reservasi = Reservasi::find($request->reservasi_id);
+        }
 
-    return view('pemesanans.create', compact('mejas', 'menus'));
-}
+        // Tampilkan meja tersedia, ATAU meja yang sedang dipesan oleh reservasi ini
+        $mejas = Meja::where('status', 'tersedia')
+            ->when($reservasi, function ($query) use ($reservasi) {
+                return $query->orWhere('id', $reservasi->meja_id);
+            })
+            ->get();
+
+        $menus = Menu::all();
+
+        return view('pemesanans.create', compact('mejas', 'menus', 'reservasi'));
+    }
 
 public function store(Request $request)
 {
@@ -98,16 +117,16 @@ public function store(Request $request)
             'total_bayar'       => $totalBayar,
             'status'            => 'selesai',
         ]);
-
-        // 2. Simpan ke Tabel PEMBAYARANS
-        Pembayaran::create([
-            'pemesanan_id'      => $pesanan->id,
-            'metode_pembayaran' => $validated['metode_pembayaran'],
-            'total_bayar'       => $totalBayar,
-            'uang_dibayar'      => $uangDibayar,
-            'kembalian'         => $kembalian,
-            // 'status'         => 'lunas', // aktifkan jika tabel pembayarans punya kolom status
-        ]);
+// Tentukan apakah ini dari pemesanan atau reservasi berdasarkan input form atau request
+Pembayaran::create([
+    'pemesanan_id'      => $pesanan->id ?? null,       // Isi jika dari pemesanan, null jika dari reservasi
+    'reservasi_id'      => $reservasi->id ?? null,     // Isi dengan ID reservasi jika transaksinya dari reservasi
+    'metode_pembayaran' => $validated['metode_pembayaran'],
+    'total_bayar'       => $totalBayar,
+    'uang_dibayar'      => $uangDibayar,
+    'kembalian'         => $kembalian,
+    'status'            => 'lunas',
+]);
 
         // 3. Simpan Rincian Menu Pesanan
         foreach ($validated['menu_id'] as $index => $menuId) {
@@ -132,6 +151,16 @@ public function store(Request $request)
     return redirect()
         ->route('pemesanans.nota', $pemesanan->id)
         ->with('success', 'Pemesanan berhasil disimpan! Silakan cetak nota.');
+
+        if ($request->filled('reservasi_id')) {
+        $reservasi = Reservasi::find($request->reservasi_id);
+        if ($reservasi) {
+            $reservasi->update(['status' => 'selesai']); // Sesuaikan nilai status di database
+        }
+    }
+
+    return redirect()->route('pemesanans.index')->with('success', 'Pemesanan berhasil dibuat!');
+
 }
 
 // Method untuk menampilkan Nota Pemesanan

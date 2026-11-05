@@ -1,142 +1,164 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Menu - CafeKita</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <style>
-        body { margin: 0; font-family: "Segoe UI", Arial, sans-serif; background: #f5f7f5; color: #202923; }
-        .sidebar { position: fixed; top: 0; left: 0; width: 260px; height: 100vh; padding: 25px 18px; background: linear-gradient(160deg, #1f3929, #304e3a); color: white; z-index: 1000; }
-        .sidebar-brand { display: flex; align-items: center; gap: 12px; padding: 5px 10px 30px; }
-        .brand-icon { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.12); color: #d9b56d; font-size: 24px; }
-        .brand-text h4 { margin: 0; font-size: 21px; font-weight: 800; }
-        .brand-text h4 span { color: #d9b56d; }
-        .sidebar-menu { display: flex; flex-direction: column; gap: 5px; }
-        .sidebar-menu a { display: flex; align-items: center; gap: 13px; padding: 12px 14px; color: rgba(255,255,255,0.72); text-decoration: none; border-radius: 12px; font-size: 14px; }
-        .sidebar-menu a.active { background: rgba(255,255,255,0.13); color: white; box-shadow: inset 3px 0 0 #d9b56d; }
-        .main-content { margin-left: 260px; min-height: 100vh; padding: 25px 32px; }
-        .stat-card { background: white; border-radius: 16px; padding: 20px; border: 1px solid #e9ede9; }
-        .badge-makanan { background: #e8f5e9; color: #2e7d32; padding: 5px 10px; border-radius: 8px; font-size: 12px; font-weight: 600; }
-        .badge-minuman { background: #e3f2fd; color: #1565c0; padding: 5px 10px; border-radius: 8px; font-size: 12px; font-weight: 600; }
-    </style>
-</head>
-<body class="app-with-sidebar">
-    @include('layouts.sidebar')
+@extends('layouts.app')
 
-    <aside class="sidebar">
-        <div class="sidebar-brand">
-            <div class="brand-icon"><i class="bi bi-cup-hot-fill"></i></div>
-            <div class="brand-text">
-                <h4>Cafe<span>Kita</span></h4>
-                <small>Management System</small>
+@section('title', 'Data Menu')
+
+@section('content')
+<div class="page-content">
+
+    {{-- HEADER HALAMAN --}}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="page-title text-success-emphasis fw-bold mb-1 fs-3">Data Menu</h2>
+            <p class="page-subtitle text-muted mb-0">Kelola daftar menu makanan dan minuman CafeKita</p>
+        </div>
+
+        <a href="{{ route('menus.create') }}" class="btn btn-success" style="background-color: #304e3a; border:none; border-radius:11px; padding: 10px 16px;">
+            <i class="bi bi-plus-lg me-1"></i> Tambah Menu
+        </a>
+    </div>
+
+    {{-- ALERT --}}
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show mb-4 border-0 rounded-4" style="font-size: 13px;">
+            <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show mb-4 border-0 rounded-4" style="font-size: 13px;">
+            <i class="bi bi-exclamation-circle-fill me-2"></i> {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
+    {{-- STATISTIK RINGKASAN --}}
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100 transition-hover">
+                <div class="card-body p-4">
+                    <div class="stat-icon mb-3 d-flex align-items-center justify-content-center rounded-3" style="width: 45px; height: 45px; background: #edf3ee; color: #304e3a; font-size:20px;">
+                        <i class="bi bi-journal-text"></i>
+                    </div>
+                    <div class="fs-4 fw-bold mb-1" style="color: #304e3a;">{{ $totalMenu ?? 0 }}</div>
+                    <div class="text-muted" style="font-size: 13px;">Total Menu</div>
+                </div>
             </div>
         </div>
-        <div class="sidebar-menu">
-            <a href="{{ route('dashboard') }}"><i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span></a>
-            <a href="{{ route('mejas.index') }}"><i class="bi bi-grid-3x3-gap-fill"></i><span>Data Meja</span></a>
-            <a href="{{ route('menus.index') }}" class="active"><i class="bi bi-journal-text"></i><span>Data Menu</span></a>
-            <a href="{{ route('pemesanans.index') }}"><i class="bi bi-receipt-cutoff"></i><span>Pemesanan</span></a>
-            <a href="{{ route('reservasis.index') }}"><i class="bi bi-calendar-check-fill"></i><span>Reservasi</span></a>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100 transition-hover">
+                <div class="card-body p-4">
+                    <div class="stat-icon mb-3 d-flex align-items-center justify-content-center rounded-3" style="width: 45px; height: 45px; background: #edf3ee; color: #304e3a; font-size:20px;">
+                        <i class="bi bi-egg-fried"></i>
+                    </div>
+                    <div class="fs-4 fw-bold mb-1 text-success">{{ $totalMakanan ?? 0 }}</div>
+                    <div class="text-muted" style="font-size: 13px;">Makanan</div>
+                </div>
+            </div>
         </div>
-    </aside>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100 transition-hover">
+                <div class="card-body p-4">
+                    <div class="stat-icon mb-3 d-flex align-items-center justify-content-center rounded-3" style="width: 45px; height: 45px; background: #edf3ee; color: #304e3a; font-size:20px;">
+                        <i class="bi bi-cup-straw"></i>
+                    </div>
+                    <div class="fs-4 fw-bold mb-1 text-primary">{{ $totalMinuman ?? 0 }}</div>
+                    <div class="text-muted" style="font-size: 13px;">Minuman</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <main class="main-content">
-        <div class="d-flex justify-content-between align-items-center mb-4">
+    {{-- TABEL DAFTAR MENU --}}
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
+        <div class="card-header bg-white p-4 border-bottom d-flex justify-content-between align-items-center">
             <div>
-                <h2 class="fw-bold mb-1">Data Menu</h2>
-                <p class="text-muted mb-0">Kelola daftar menu makanan dan minuman CafeKita</p>
+                <h5 class="mb-1 fw-bold" style="color: #304e3a;">
+                    <i class="bi bi-list-ul me-2"></i> Daftar Menu
+                </h5>
+                <div class="text-muted" style="font-size: 12px;">Kelola daftar menu makanan dan minuman CafeKita</div>
             </div>
-            <a href="{{ route('menus.create') }}" class="btn btn-success px-3 py-2 fw-semibold" style="background:#1f3929; border:none;">
-                <i class="bi bi-plus-lg me-1"></i> Tambah Menu
-            </a>
+            <span class="badge rounded-pill" style="background:#edf3ee; color:#304e3a;">
+                {{ isset($menus) ? count($menus) : ($totalMenu ?? 0) }} Data
+            </span>
         </div>
 
-        @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
-
-        {{-- Statistik Ringkasan --}}
-        <div class="row g-3 mb-4">
-            <div class="col-md-4">
-                <div class="stat-card">
-                    <small class="text-muted">Total Menu</small>
-                    <h3 class="fw-bold mt-1 mb-0">{{ $totalMenu }}</h3>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="stat-card">
-                    <small class="text-muted">Makanan</small>
-                    <h3 class="fw-bold mt-1 mb-0">{{ $totalMakanan }}</h3>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="stat-card">
-                    <small class="text-muted">Minuman</small>
-                    <h3 class="fw-bold mt-1 mb-0">{{ $totalMinuman }}</h3>
-                </div>
-            </div>
-        </div>
-
-        {{-- Tabel Daftar Menu --}}
-        <div class="card border-0 shadow-sm rounded-4">
-            <div class="card-body p-4">
-                <h5 class="fw-bold mb-3"><i class="bi bi-list-ul me-2"></i>Daftar Menu</h5>
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle">
-                        <thead class="table-light">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead style="background: #fafbfa;">
+                        <tr>
+                            <th class="text-muted fw-semibold text-uppercase px-4 py-3" style="font-size: 12px;">NO</th>
+                            <th class="text-muted fw-semibold text-uppercase px-4 py-3" style="font-size: 12px;">KODE MENU</th>
+                            <th class="text-muted fw-semibold text-uppercase px-4 py-3" style="font-size: 12px;">NAMA MENU</th>
+                            <th class="text-muted fw-semibold text-uppercase px-4 py-3" style="font-size: 12px;">KATEGORI</th>
+                            <th class="text-muted fw-semibold text-uppercase px-4 py-3" style="font-size: 12px;">HARGA</th>
+                            <th class="text-muted fw-semibold text-uppercase px-4 py-3 text-center" style="font-size: 12px;">AKSI</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($menus as $menu)
                             <tr>
-                                <th>NO</th>
-                                <th>KODE MENU</th>
-                                <th>NAMA MENU</th>
-                                <th>KATEGORI</th>
-                                <th>HARGA</th>
-                                <th class="text-center">AKSI</th>
+                                <td class="px-4 py-3"><span class="text-muted" style="font-size:13px;">{{ $loop->iteration }}</span></td>
+                                <td class="px-4 py-3">
+                                    <span class="badge bg-light text-dark border px-2 py-1" style="font-size: 12px;">{{ $menu->kode_menu }}</span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="fw-semibold text-dark" style="font-size:13px;">{{ $menu->nama_menu }}</div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="badge rounded-pill px-3 py-2" style="font-size: 11px; {{ $menu->kategori == 'makanan' ? 'background: #e8f5e9; color: #2e7d32;' : 'background: #e3f2fd; color: #1565c0;' }}">
+                                        {{ ucfirst($menu->kategori) }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="fw-bold" style="color: #304e3a; font-size:13px;">
+                                        Rp {{ number_format($menu->harga, 0, ',', '.') }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <div class="d-flex justify-content-center gap-1">
+                                        <a href="{{ route('menus.edit', $menu->id) }}" class="btn btn-sm d-inline-flex align-items-center justify-content-center rounded-3" style="width: 34px; height: 34px; background: #fff4d9; color: #9a751e;" title="Edit Menu">
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </a>
+                                        <form action="{{ route('menus.destroy', $menu->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus menu ini?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm d-inline-flex align-items-center justify-content-center rounded-3" style="width: 34px; height: 34px; background: #fdeaea; color: #dc3545;" title="Hapus Menu">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($menus as $menu)
-                                <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td><span class="badge bg-light text-dark border">{{ $menu->kode_menu }}</span></td>
-                                    <td class="fw-semibold">{{ $menu->nama_menu }}</td>
-                                    <td>
-                                        <span class="{{ $menu->kategori == 'makanan' ? 'badge-makanan' : 'badge-minuman' }}">
-                                            {{ ucfirst($menu->kategori) }}
-                                        </span>
-                                    </td>
-                                    <td>Rp {{ number_format($menu->harga, 0, ',', '.') }}</td>
-                                    <td class="text-center">
-                                        <div class="d-flex justify-content-center gap-1">
-                                            <a href="{{ route('menus.edit', $menu->id) }}" class="btn btn-sm btn-outline-warning">
-                                                <i class="bi bi-pencil-fill"></i>
-                                            </a>
-                                            <form action="{{ route('menus.destroy', $menu->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus menu ini?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                    <i class="bi bi-trash-fill"></i>
-                                                </button>
-                                            </form>
+                        @empty
+                            <tr>
+                                <td colspan="6">
+                                    <div class="text-center py-5">
+                                        <div class="d-flex justify-content-center align-items-center rounded-circle mx-auto mb-3" style="width: 60px; height: 60px; background: #edf3ee; color: #304e3a; font-size: 25px;">
+                                            <i class="bi bi-journal-text"></i>
                                         </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="6" class="text-center py-4 text-muted">Belum ada menu yang tersedia.</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
+                                        <h6 class="fw-bold">Belum Ada Menu</h6>
+                                        <p class="text-muted small mb-3">Belum terdapat data menu di CafeKita.</p>
+                                        <a href="{{ route('menus.create') }}" class="btn btn-success btn-sm" style="background-color: #304e3a; border:none;">
+                                            <i class="bi bi-plus-lg me-1"></i> Tambah Menu
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
-    </main>
+    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    {{-- FOOTER --}}
+    <div class="text-center mt-4 mb-3">
+        <small class="text-muted">
+            © {{ date('Y') }} CafeKita Management System
+        </small>
+    </div>
+
+</div>
+@endsection

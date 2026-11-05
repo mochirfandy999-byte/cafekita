@@ -8,6 +8,7 @@ class Pembayaran extends Model
 {
     protected $fillable = [
         'pemesanan_id',
+        'reservasi_id',
         'metode_pembayaran',
         'total_bayar',
         'uang_dibayar',
@@ -19,4 +20,8 @@ class Pembayaran extends Model
     {
         return $this->belongsTo(Pemesanan::class);
     }
+    public function reservasi()
+{
+    return $this->belongsTo(Reservasi::class);
+}
 }

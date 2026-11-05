@@ -94,96 +94,6 @@
 <body class="app-with-sidebar">
     @include('layouts.sidebar')
 
-<div class="sidebar">
-
-    <div class="brand">
-        <div class="brand-icon">
-            <i class="bi bi-cup-hot-fill"></i>
-        </div>
-        <div>
-            <h4>CafeKita</h4>
-            <small>Management System</small>
-        </div>
-    </div>
-
-    <div class="menu-title">Menu Utama</div>
-
-<ul class="sidebar-menu">
-
-    {{-- Dashboard (Semua Role) --}}
-    <li>
-        <a href="{{ route('dashboard') }}"
-           class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
-            <i class="bi bi-grid-1x2-fill"></i>
-            <span>Dashboard</span>
-        </a>
-    </li>
-
-    {{-- Data Meja (Hanya Kasir) --}}
-    @if(auth()->user()->role === 'kasir')
-        <li>
-            <a href="{{ route('mejas.index') }}"
-               class="{{ request()->routeIs('mejas.*') ? 'active' : '' }}">
-                <i class="bi bi-grid-3x3-gap-fill"></i>
-                <span>Data Meja</span>
-            </a>
-        </li>
-    @endif
-{{-- Data Menu (Hanya Kasir) --}}
-@if(auth()->user()->role === 'kasir')
-    <a href="{{ route('menus.index') }}" class="{{ request()->routeIs('menus.*') ? 'active' : '' }}">
-        <i class="bi bi-journal-text"></i>
-        <span>Data Menu</span>
-    </a>
-@endif
-    {{-- Pemesanan (Kasir & Staf Dapur) --}}
-    @if(in_array(auth()->user()->role, ['kasir', 'staff_dapur']))
-        <li>
-            <a href="{{ route('pemesanans.index') }}"
-               class="{{ request()->routeIs('pemesanans.*') ? 'active' : '' }}">
-                <i class="bi bi-receipt-cutoff"></i>
-                <span>Pemesanan</span>
-            </a>
-        </li>
-    @endif
-
-    {{-- Reservasi (Hanya Kasir) --}}
-    @if(auth()->user()->role === 'kasir')
-        <li>
-            <a href="{{ route('reservasis.index') }}"
-               class="{{ request()->routeIs('reservasis.*') ? 'active' : '' }}">
-                <i class="bi bi-calendar-check-fill"></i>
-                <span>Reservasi</span>
-            </a>
-        </li>
-    @endif
-
-    {{-- Laporan (Khusus Manager) --}}
-    @if(auth()->user()->role === 'manager')
-        <li>
-            <a href="{{ route('laporan.index') }}"
-               class="{{ request()->routeIs('laporan.*') ? 'active' : '' }}">
-                <i class="bi bi-bar-chart-fill"></i>
-                <span>Laporan</span>
-            </a>
-        </li>
-    @endif
-
-</ul>
-
-    <div class="sidebar-bottom">
-        <form action="{{ route('logout') }}" method="POST">
-            @csrf
-            <button type="submit" class="logout-button">
-                <i class="bi bi-box-arrow-left"></i>
-                <span>Logout</span>
-            </button>
-        </form>
-    </div>
-
-</div>
-
-
 <div class="main-content">
 
     <div class="topbar">
@@ -216,7 +126,6 @@
                 Laporan transaksi dan reservasi CafeKita
             </p>
         </div>
-
 
         {{-- FILTER --}}
         <div class="filter-card mb-4">
@@ -390,6 +299,7 @@
 
             </div>
 
+            <div class="table-card mb-4">
 
             <div class="table-card-body">
 
@@ -545,7 +455,7 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>No. Reservasi</th>
+                                <th>No. Transaksi</th>
                                 <th>Pelanggan</th>
                                 <th>Meja</th>
                                 <th>Tanggal</th>
@@ -662,6 +572,83 @@
             </div>
 
         </div>
+
+<div class="table-card-header">
+    <div>
+        <h5 class="table-card-title">
+            <i class="bi bi-receipt me-2"></i>
+            Laporan Pendapatan
+        </h5>
+
+        <div class="table-card-subtitle">
+            Data pendapatan CafeKita
+        </div>
+    </div>
+
+    <span class="badge rounded-pill"
+        style="background:#edf3ee;color:#304e3a;">
+        {{-- Ubah dari $totalPendapatan->sum('total_bayar') langsung ke variabel $totalPendapatan --}}
+        Rp {{ number_format($totalPendapatan, 0, ',', '.') }}
+    </span>
+</div>
+
+   <div class="table-card-body">
+
+        <div class="table-responsive">
+
+            <table class="table align-middle">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>No. Transaksi</th>
+                                <th>Metode Pembayaran</th>
+                                <th>Total Pembayaran</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+        <tbody>
+    @forelse ($pembayarans as $item)
+        <tr>
+            <!-- No. Urut Otomatis -->
+            <td>{{ $loop->iteration }}</td>
+
+            <!-- Kolom No. Transaksi / Reservasi yang Diperbarui -->
+            <td>
+                <span class="number-green">
+                    @if($item->pemesanan)
+                        {{ $item->pemesanan->nomor_transaksi ?? $item->pemesanan->no_pemesanan ?? '-' }}
+                    @elseif($item->reservasi)
+                        {{ $item->reservasi->nomor_transaksi ?? $item->reservasi->no_reservasi ?? '-' }}
+                    @else
+                        -
+                    @endif
+                </span>
+            </td>
+
+            <!-- Metode Pembayaran -->
+            <td>{{ $item->metode_pembayaran }}</td>
+
+            <!-- Total Pembayaran (Format Rupiah) -->
+            <td>Rp {{ number_format($item->total_bayar, 0, ',', '.') }}</td>
+
+            <!-- Status dengan Badge -->
+            <td>
+                <span class="badge rounded-pill" style="background: #edf3ee; color: #304e3a;">
+                    <i class="bi bi-check-circle me-1"></i> {{ $item->status }}
+                </span>
+            </td>
+        </tr>
+    @empty
+        <tr>
+            <td colspan="5" class="text-center text-muted py-3">
+                Belum ada data pembayaran
+            </td>
+        </tr>
+    @endforelse
+</tbody>
+            </table>
+</div>
+</div>
 
 
         <div class="text-center mt-4">

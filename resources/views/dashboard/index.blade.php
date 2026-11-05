@@ -674,7 +674,7 @@
 
 
             {{-- Laporan (Khusus Manager) --}}
-            @if(auth()->user()->role === 'manager')
+            @if(auth()->user()->role === ['manager', 'kasir'])
 
                 <a
                     href="{{ route('laporan.index') }}"

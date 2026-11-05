@@ -20,22 +20,25 @@ class ReservasiController extends Controller
             ->latest('jam_reservasi')
             ->get();
 
-        return view('reservasis.index', compact('reservasis'));
+        $reservasiBatal = $reservasis->where('status', 'dibatalkan')->count();
+
+        return view('reservasis.index', compact('reservasis', 'reservasiBatal'));
     }
 
     /**
      * Form tambah reservasi
      */
-   public function create()
-{
-    $mejas = Meja::where('status', 'tersedia')
-        ->orderBy('nomor_meja')
-        ->get();
+    public function create()
+    {
+        $mejas = Meja::where('status', 'tersedia')
+            ->orderBy('nomor_meja')
+            ->get();
 
-    $menus = Menu::orderBy('nama_menu')->get(); // <-- Ambil data menu
+        $menus = Menu::orderBy('nama_menu')->get();
 
-    return view('reservasis.create', compact('mejas', 'menus'));
-}
+        return view('reservasis.create', compact('mejas', 'menus'));
+    }
+
     /**
      * Simpan reservasi
      */
@@ -50,6 +53,10 @@ class ReservasiController extends Controller
             'jumlah_orang' => 'required|integer|min:1',
             'status' => 'required|in:pending,dikonfirmasi,selesai,dibatalkan',
             'keterangan' => 'nullable|string',
+            'metode_pembayaran' => 'nullable|string|max:50',
+            'total_bayar' => 'nullable|numeric|min:0',
+            'uang_dibayar' => 'nullable|numeric|min:0',
+            'kembalian' => 'nullable|numeric|min:0',
         ], [
             'meja_id.required' => 'Meja wajib dipilih.',
             'meja_id.exists' => 'Meja tidak ditemukan.',
@@ -88,11 +95,7 @@ class ReservasiController extends Controller
             '-' .
             random_int(100, 999);
 
-        DB::transaction(function () use (
-            $validated,
-            $nomorReservasi,
-            $meja
-        ) {
+        DB::transaction(function () use ($validated, $nomorReservasi, $meja) {
 
             Reservasi::create([
                 'nomor_reservasi' => $nomorReservasi,
@@ -104,10 +107,13 @@ class ReservasiController extends Controller
                 'jumlah_orang' => $validated['jumlah_orang'],
                 'status' => $validated['status'],
                 'keterangan' => $validated['keterangan'] ?? null,
+                'metode_pembayaran' => $validated['metode_pembayaran'] ?? null,
+                'total_bayar' => $validated['total_bayar'] ?? 0,
+                'uang_dibayar' => $validated['uang_dibayar'] ?? 0,
+                'kembalian' => $validated['kembalian'] ?? 0,
             ]);
 
-            // Jika reservasi belum dibatalkan/selesai,
-            // meja menjadi reservasi
+            // Jika reservasi belum dibatalkan/selesai, meja menjadi reservasi
             if (in_array($validated['status'], ['pending', 'dikonfirmasi'])) {
                 $meja->update([
                     'status' => 'reservasi'
@@ -136,10 +142,12 @@ class ReservasiController extends Controller
     public function edit(Reservasi $reservasi)
     {
         $mejas = Meja::orderBy('nomor_meja')->get();
+        $menus = Menu::orderBy('nama_menu')->get();
 
         return view('reservasis.edit', compact(
             'reservasi',
-            'mejas'
+            'mejas',
+            'menus'
         ));
     }
 
@@ -159,6 +167,11 @@ class ReservasiController extends Controller
             'jumlah_orang' => 'required|integer|min:1',
             'status' => 'required|in:pending,dikonfirmasi,selesai,dibatalkan',
             'keterangan' => 'nullable|string',
+            // Validasi kolom pembayaran baru
+            'metode_pembayaran' => 'nullable|string|max:50',
+            'total_bayar' => 'nullable|numeric|min:0',
+            'uang_dibayar' => 'nullable|numeric|min:0',
+            'kembalian' => 'nullable|numeric|min:0',
         ]);
 
         $mejaBaru = Meja::findOrFail($validated['meja_id']);
@@ -175,16 +188,12 @@ class ReservasiController extends Controller
                 );
         }
 
-        DB::transaction(function () use (
-            $validated,
-            $reservasi,
-            $mejaBaru
-        ) {
+        DB::transaction(function () use ($validated, $reservasi, $mejaBaru) {
 
             // Simpan meja lama
             $mejaLama = $reservasi->meja;
 
-            // Update reservasi
+            // Update reservasi (termasuk kolom pembayaran baru jika ada kiriman datanya)
             $reservasi->update($validated);
 
             /*
@@ -195,7 +204,6 @@ class ReservasiController extends Controller
 
             // Jika meja diganti
             if ($mejaLama && $mejaLama->id != $mejaBaru->id) {
-
                 // Meja lama dikembalikan tersedia
                 if ($mejaLama->status === 'reservasi') {
                     $mejaLama->update([
@@ -206,7 +214,6 @@ class ReservasiController extends Controller
 
             // Jika status aktif
             if (in_array($validated['status'], ['pending', 'dikonfirmasi'])) {
-
                 $mejaBaru->update([
                     'status' => 'reservasi'
                 ]);
@@ -214,7 +221,6 @@ class ReservasiController extends Controller
 
             // Jika selesai atau dibatalkan
             if (in_array($validated['status'], ['selesai', 'dibatalkan'])) {
-
                 $mejaBaru->update([
                     'status' => 'tersedia'
                 ]);
@@ -237,8 +243,7 @@ class ReservasiController extends Controller
 
             $reservasi->delete();
 
-            // Jika meja sedang reservasi,
-            // kembalikan menjadi tersedia
+            // Jika meja sedang reservasi, kembalikan menjadi tersedia
             if ($meja && $meja->status === 'reservasi') {
                 $meja->update([
                     'status' => 'tersedia'

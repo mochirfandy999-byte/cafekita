@@ -490,7 +490,7 @@
                                     <option value="">-- Pilih Meja --</option>
                                     @if(isset($mejas))
                                         @foreach($mejas as $meja)
-                                            <option value="{{ $meja->id }}" {{ old('meja_id') == $meja->id ? 'selected' : '' }}>
+                                            <option value="{{ $meja->id }}" {{ old('meja_id', $reservasi->meja_id ?? '') == $meja->id ? 'selected' : '' }}>
                                                 Meja {{ $meja->nomor_meja ?? $meja->nomor }} (Kapasitas: {{ $meja->kapasitas }} Orang)
                                             </option>
                                         @endforeach
@@ -504,10 +504,14 @@
                             <!-- Nama Pelanggan -->
                             <div class="col-md-6">
                                 <label class="form-label">Nama Pelanggan <span class="required">*</span></label>
-                                <input type="text" name="nama_pelanggan" class="form-control @error('nama_pelanggan') is-invalid @enderror" value="{{ old('nama_pelanggan') }}" placeholder="Contoh: Budi Santoso" required>
+                                <input type="text" name="nama_pelanggan" id="nama_pelanggan" class="form-control @error('nama_pelanggan') is-invalid @enderror" 
+                                value="{{ old('nama_pelanggan', $reservasi->nama_pelanggan ?? '') }}" placeholder="Contoh: Budi Santoso" required>
                                 @error('nama_pelanggan')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
+                                @if($reservasi)
+    <input type="hidden" name="reservasi_id" value="{{ $reservasi->id }}">
+@endif
                             </div>
 
                             <!-- Catatan -->

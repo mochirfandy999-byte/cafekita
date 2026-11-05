@@ -52,7 +52,7 @@
             </a>
         @endif
 
-        @if($role === 'manager')
+        @if(in_array($role, ['manager', 'kasir'], true))
             <a href="{{ route('laporan.index') }}" class="{{ request()->routeIs('laporan.*') ? 'active' : '' }}">
                 <i class="bi bi-bar-chart-fill"></i>
                 <span>Laporan</span>

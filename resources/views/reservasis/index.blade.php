@@ -212,15 +212,14 @@
             </div>
 
             <div class="col-xl-3 col-md-6">
-                <div class="stat-card">
-                    <div class="card-body p-4">
-                        <div class="stat-icon"><i class="bi bi-clock"></i></div>
-                        <div class="stat-number text-warning">{{ $reservasis->where('status','pending')->count() }}</div>
-                        <div class="stat-label">Pending</div>
-                    </div>
-                </div>
-            </div>
-
+    <div class="stat-card">
+        <div class="card-body p-4">
+            <div class="stat-icon"><i class="bi bi-x-circle text-danger"></i></div>
+            <div class="stat-number text-danger">{{ $reservasiBatal }}</div>
+            <div class="stat-label">Reservasi Dibatalkan</div>
+        </div>
+    </div>
+</div>
             <div class="col-xl-3 col-md-6">
                 <div class="stat-card">
                     <div class="card-body p-4">

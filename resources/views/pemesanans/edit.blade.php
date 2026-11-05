@@ -1,192 +1,209 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Pemesanan - CafeKita</title>
 
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .main-content {
+            margin-left: 260px; /* Sesuaikan dengan lebar sidebar CafeKita */
+            padding: 2rem 2.5rem;
+            min-height: 100vh;
+        }
+        .form-label {
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: #495057;
+            margin-bottom: 0.35rem;
+        }
+        .form-control, .form-select {
+            border-radius: 8px;
+            border-color: #dee2e6;
+            font-size: 0.88rem;
+            padding: 0.6rem 0.85rem;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #2d6a4f;
+            box-shadow: 0 0 0 0.2rem rgba(45, 106, 79, 0.15);
+        }
+        .btn-theme-primary {
+            background-color: #234d3b;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            padding: 0.55rem 1.4rem;
+            font-weight: 500;
+            font-size: 0.88rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .btn-theme-primary:hover {
+            background-color: #1b3d2f;
+            color: #ffffff;
+        }
+        .btn-back {
+            border-radius: 8px;
+            font-size: 0.88rem;
+            padding: 0.55rem 1.4rem;
+            color: #495057;
+            border: 1px solid #ced4da;
+            background-color: #ffffff;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .btn-back:hover {
+            background-color: #f1f3f5;
+            color: #212529;
+        }
+        .section-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #2b2f32;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+        }
+    </style>
 </head>
 
-<body class="bg-light app-with-sidebar">
-@include('layouts.sidebar')
+<body class="app-with-sidebar">
 
-<div class="container py-5">
+    @include('layouts.sidebar')
 
-    <div class="card shadow-sm border-0">
+    <div class="main-content">
+        {{-- Header Atas --}}
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h4 class="fw-bold mb-1 text-dark">Edit Pemesanan</h4>
+                <p class="text-secondary small mb-0">Kelola dan perbarui data transaksi pemesanan pelanggan CafeKita</p>
+            </div>
 
-        <div class="card-header bg-warning">
-
-            <h4 class="mb-0">
-                Edit Pemesanan
-            </h4>
-
+            {{-- Info Profil User --}}
+            <div class="d-flex align-items-center bg-white border rounded-3 px-3 py-2 shadow-sm gap-2">
+                <i class="bi bi-person text-secondary fs-5"></i>
+                <div class="text-end" style="line-height: 1.2;">
+                    <div class="fw-semibold small text-dark">{{ auth()->user()->name ?? 'Kasir CafeKita' }}</div>
+                    <small class="text-muted" style="font-size: 0.75rem;">{{ auth()->user()->role ?? 'Kasir' }}</small>
+                </div>
+            </div>
         </div>
 
-        <div class="card-body">
+        {{-- Alert Error --}}
+        @if($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm rounded-3 mb-4" role="alert">
+                <ul class="mb-0 small">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
 
-            @if($errors->any())
-
-                <div class="alert alert-danger">
-
-                    <ul class="mb-0">
-
-                        @foreach($errors->all() as $error)
-
-                            <li>{{ $error }}</li>
-
-                        @endforeach
-
-                    </ul>
-
-                </div>
-
-            @endif
-
-
-            <form
-                action="{{ route('pemesanans.update', $pemesanan->id) }}"
-                method="POST">
-
+        {{-- Form Card --}}
+        <div class="card border border-light-subtle shadow-sm rounded-3 bg-white p-4">
+            <form action="{{ route('pemesanans.update', $pemesanan->id) }}" method="POST">
                 @csrf
                 @method('PUT')
 
-
-                <div class="mb-3">
-
-                    <label class="form-label">
-                        Nomor Pemesanan
-                    </label>
-
-                    <input
-                        type="text"
-                        class="form-control"
-                        value="{{ $pemesanan->nomor_transaksi }}"
-                        readonly>
-
+                {{-- Informasi Pemesanan --}}
+                <div class="section-title">
+                    <i class="bi bi-receipt text-secondary"></i> Detail Transaksi & Pelanggan
                 </div>
 
+                <div class="row g-3 mb-4">
+                    {{-- Nomor Pemesanan / Transaksi --}}
+                    <div class="col-md-6">
+                        <label class="form-label">Nomor Pemesanan</label>
+                        <input type="text"
+                               class="form-control bg-light text-muted"
+                               value="{{ $pemesanan->nomor_transaksi }}"
+                               readonly>
+                    </div>
 
-                <div class="mb-3">
+                    {{-- Nama Pelanggan --}}
+                    <div class="col-md-6">
+                        <label class="form-label">Nama Pelanggan <span class="text-danger">*</span></label>
+                        <input type="text"
+                               name="nama_pelanggan"
+                               class="form-control"
+                               placeholder="Masukkan nama pelanggan"
+                               value="{{ old('nama_pelanggan', $pemesanan->nama_pelanggan) }}"
+                               required>
+                    </div>
 
-                    <label class="form-label">
-                        Nama Pelanggan
-                    </label>
+                    {{-- Meja --}}
+                    <div class="col-md-4">
+                        <label class="form-label">Meja <span class="text-danger">*</span></label>
+                        <select name="meja_id" class="form-select" required>
+                            @foreach($mejas as $meja)
+                                <option value="{{ $meja->id }}"
+                                    {{ old('meja_id', $pemesanan->meja_id) == $meja->id ? 'selected' : '' }}>
+                                    Meja {{ $meja->nomor_meja }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
 
-                    <input
-                        type="text"
-                        name="nama_pelanggan"
-                        class="form-control"
-                        value="{{ old('nama_pelanggan', $pemesanan->nama_pelanggan) }}"
-                        required>
+                    {{-- Total Bayar --}}
+                    <div class="col-md-4">
+                        <label class="form-label">Total Bayar (Rp) <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted" style="border-radius: 8px 0 0 8px; font-size: 0.88rem;">Rp</span>
+                            <input type="number"
+                                   name="total_bayar"
+                                   class="form-control"
+                                   style="border-radius: 0 8px 8px 0;"
+                                   value="{{ old('total_bayar', $pemesanan->total_bayar) }}"
+                                   min="0"
+                                   step="100"
+                                   placeholder="0"
+                                   required>
+                        </div>
+                    </div>
 
-                </div>
-
-
-                <div class="mb-3">
-
-                    <label class="form-label">
-                        Meja
-                    </label>
-
-                    <select name="meja_id"
-                            class="form-select"
-                            required>
-
-                        @foreach($mejas as $meja)
-
-                            <option
-                                value="{{ $meja->id }}"
-                                {{ old('meja_id', $pemesanan->meja_id) == $meja->id ? 'selected' : '' }}>
-
-                                Meja {{ $meja->nomor_meja }}
-
+                    {{-- Status Pemesanan --}}
+                    <div class="col-md-4">
+                        <label class="form-label">Status Pemesanan <span class="text-danger">*</span></label>
+                        <select name="status" class="form-select" required>
+                            <option value="pending" {{ old('status', $pemesanan->status) === 'pending' ? 'selected' : '' }}>
+                                Pending
                             </option>
-
-                        @endforeach
-
-                    </select>
-
+                            <option value="selesai" {{ old('status', $pemesanan->status) === 'selesai' ? 'selected' : '' }}>
+                                Selesai
+                            </option>
+                            <option value="batal" {{ old('status', $pemesanan->status) === 'batal' ? 'selected' : '' }}>
+                                Batal
+                            </option>
+                        </select>
+                    </div>
                 </div>
 
-
-                <div class="mb-3">
-
-                    <label class="form-label">
-                        Total Bayar
-                    </label>
-
-                    <input
-                        type="number"
-                        name="total_bayar"
-                        class="form-control"
-                        value="{{ old('total_bayar', $pemesanan->total_bayar) }}"
-                        min="0"
-                        step="100"
-                        required>
-
-                </div>
-
-
-                <div class="mb-3">
-
-                    <label class="form-label">
-                        Status
-                    </label>
-
-                    <select name="status"
-                            class="form-select">
-
-                        <option value="pending"
-                            {{ $pemesanan->status === 'pending' ? 'selected' : '' }}>
-                            Pending
-                        </option>
-
-                        <option value="selesai"
-                            {{ $pemesanan->status === 'selesai' ? 'selected' : '' }}>
-                            Selesai
-                        </option>
-
-                        <option value="batal"
-                            {{ $pemesanan->status === 'batal' ? 'selected' : '' }}>
-                            Batal
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div class="d-flex gap-2">
-
-                    <a href="{{ route('pemesanans.index') }}"
-                       class="btn btn-secondary">
-                        Kembali
+                {{-- Tombol Aksi --}}
+                <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                    <a href="{{ route('pemesanans.index') }}" class="btn-back">
+                        <i class="bi bi-arrow-left"></i> Kembali
                     </a>
 
-                    <button type="submit"
-                            class="btn btn-warning">
-                        Update
+                    <button type="submit" class="btn-theme-primary">
+                        <i class="bi bi-floppy"></i> Simpan Perubahan
                     </button>
-
                 </div>
-
             </form>
-
         </div>
-
     </div>
 
-</div>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
