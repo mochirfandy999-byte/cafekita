@@ -46,7 +46,7 @@
         @endif
 
         @if($role === 'staff_dapur')
-            <a href="{{ route('laporan.bahan-baku') }}"
+            <a href="{{ route('laporan.bahan-baku.index') }}"
                 class="menu-item {{ request()->routeIs('laporan.bahan-baku*') ? 'active' : '' }}">
                 <i class="bi bi-bar-chart-fill"></i>
                 <span>Laporan</span>

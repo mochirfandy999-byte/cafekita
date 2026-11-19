@@ -59,9 +59,11 @@ Route::middleware('ceklogin')->group(function () {
         Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
     });
     /* LAPORAN BAHAN BAKU (Khusus staff dapur) */
-    Route::middleware(['auth'])->group(function () {
-        Route::get('/laporan/bahan-baku', [LaporanBahanBakuController::class, 'index'])->name('laporan.bahan-baku');
-        Route::get('/laporan/bahan-baku/export', [LaporanBahanBakuController::class, 'store'])->name('laporan.bahan-baku.store'); // Sesuai alur 'Simpan Laporan'
+    Route::middleware(['auth', 'role:staff_dapur'])->group(function () {
+        Route::get('/laporan/bahan-baku', [LaporanBahanBakuController::class, 'index'])->name('laporan.bahan-baku.index');
+        Route::post('/laporan/bahan-baku', [LaporanBahanBakuController::class, 'store'])->name('laporan.bahan-baku.store');
+        Route::put('/laporan/bahan-baku/{id}', [LaporanBahanBakuController::class, 'update'])->name('laporan.bahan-baku.update');
+        Route::delete('/laporan/bahan-baku/{id}', [LaporanBahanBakuController::class, 'destroy'])->name('laporan.bahan-baku.destroy');
     });
 });
 
