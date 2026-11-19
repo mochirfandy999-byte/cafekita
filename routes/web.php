@@ -8,6 +8,8 @@ use App\Http\Controllers\ReservasiController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PemesananController;
+use App\Http\Controllers\LaporanBahanBakuController;
+
 
 
 /*
@@ -56,9 +58,13 @@ Route::middleware('ceklogin')->group(function () {
     Route::middleware('role:manager,kasir')->group(function () {
         Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
     });
-
+    /* LAPORAN BAHAN BAKU (Khusus staff dapur) */
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/laporan/bahan-baku', [LaporanBahanBakuController::class, 'index'])->name('laporan.bahan-baku');
+        Route::get('/laporan/bahan-baku/export', [LaporanBahanBakuController::class, 'store'])->name('laporan.bahan-baku.store'); // Sesuai alur 'Simpan Laporan'
+    });
 });
-   
+
 
 Route::get('/', function () {
     return redirect()->route('login');

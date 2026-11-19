@@ -45,6 +45,14 @@
             </a>
         @endif
 
+        @if($role === 'staff_dapur')
+            <a href="{{ route('laporan.bahan-baku') }}"
+                class="menu-item {{ request()->routeIs('laporan.bahan-baku*') ? 'active' : '' }}">
+                <i class="bi bi-bar-chart-fill"></i> 
+                <span>Laporan</span>
+            </a>
+        @endif
+
         @if($role === 'kasir')
             <a href="{{ route('reservasis.index') }}" class="{{ request()->routeIs('reservasis.*') ? 'active' : '' }}">
                 <i class="bi bi-calendar-check-fill"></i>
@@ -91,7 +99,7 @@
         z-index: 1030;
     }
 
-    body.app-with-sidebar > .sidebar:not(#app-sidebar) {
+    body.app-with-sidebar>.sidebar:not(#app-sidebar) {
         display: none !important;
     }
 
