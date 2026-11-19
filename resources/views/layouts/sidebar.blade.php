@@ -38,7 +38,7 @@
             </a>
         @endif
 
-        @if(in_array($role, ['kasir', 'staff_dapur'], true))
+        @if(in_array($role, ['kasir'], true))
             <a href="{{ route('pemesanans.index') }}" class="{{ request()->routeIs('pemesanans.*') ? 'active' : '' }}">
                 <i class="bi bi-receipt-cutoff"></i>
                 <span>Pemesanan</span>
@@ -48,7 +48,7 @@
         @if($role === 'staff_dapur')
             <a href="{{ route('laporan.bahan-baku') }}"
                 class="menu-item {{ request()->routeIs('laporan.bahan-baku*') ? 'active' : '' }}">
-                <i class="bi bi-bar-chart-fill"></i> 
+                <i class="bi bi-bar-chart-fill"></i>
                 <span>Laporan</span>
             </a>
         @endif
