@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -45,7 +46,8 @@
             gap: 0.4rem;
         }
 
-        .form-control, .form-select {
+        .form-control,
+        .form-select {
             border-radius: 10px;
             border: 1px solid #e2e8f0;
             padding: 0.6rem 0.85rem;
@@ -58,7 +60,8 @@
             font-size: 0.875rem;
         }
 
-        .form-control:focus, .form-select:focus {
+        .form-control:focus,
+        .form-select:focus {
             border-color: #2d5a3f;
             box-shadow: 0 0 0 3px rgba(45, 90, 63, 0.12);
         }
@@ -115,10 +118,10 @@
         <div class="form-card p-4 p-md-4">
 
             {{-- Error Validasi --}}
-            @if($errors->any())
+            @if ($errors->any())
                 <div class="alert alert-danger py-2 px-3 rounded-3 small mb-3 border-0">
                     <ul class="mb-0 ps-3">
-                        @foreach($errors->all() as $error)
+                        @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
                         @endforeach
                     </ul>
@@ -134,12 +137,8 @@
                         <label class="form-label">
                             <i class="bi bi-qr-code text-muted"></i> Nomor Meja
                         </label>
-                        <input type="text"
-                               name="nomor_meja"
-                               class="form-control"
-                               placeholder="Contoh: M01"
-                               value="{{ old('nomor_meja') }}"
-                               required>
+                        <input type="text" name="nomor_meja" id="nomor_meja" class="form-control"
+                            placeholder="Contoh: M01" value="{{ $nomorOtomatis }}" readonly>
                     </div>
 
                     {{-- Status --}}
@@ -149,9 +148,12 @@
                         </label>
                         <select name="status" class="form-select" required>
                             <option value="">-- Pilih Status --</option>
-                            <option value="tersedia" {{ old('status') == 'tersedia' ? 'selected' : '' }}>Tersedia</option>
-                            <option value="terisi" {{ old('status') == 'terisi' ? 'selected' : '' }}>Dine in (Terisi)</option>
-                            <option value="reservasi" {{ old('status') == 'reservasi' ? 'selected' : '' }}>Reservasi</option>
+                            <option value="tersedia" {{ old('status') == 'tersedia' ? 'selected' : '' }}>Tersedia
+                            </option>
+                            <option value="terisi" {{ old('status') == 'terisi' ? 'selected' : '' }}>Dine in (Terisi)
+                            </option>
+                            <option value="reservasi" {{ old('status') == 'reservasi' ? 'selected' : '' }}>Reservasi
+                            </option>
                         </select>
                     </div>
 
@@ -161,14 +163,10 @@
                             <i class="bi bi-people text-muted"></i> Kapasitas Kursi
                         </label>
                         <div class="input-group">
-                            <input type="number"
-                                   name="kapasitas"
-                                   class="form-control"
-                                   placeholder="Contoh: 4"
-                                   value="{{ old('kapasitas') }}"
-                                   min="1"
-                                   required>
-                            <span class="input-group-text bg-light text-muted small border-start-0" style="border-radius: 0 10px 10px 0;">Orang</span>
+                            <input type="number" name="kapasitas" class="form-control" placeholder="Contoh: 4"
+                                value="{{ old('kapasitas') }}" min="1" required>
+                            <span class="input-group-text bg-light text-muted small border-start-0"
+                                style="border-radius: 0 10px 10px 0;">Orang</span>
                         </div>
                     </div>
 
@@ -177,11 +175,9 @@
                         <label class="form-label">
                             <i class="bi bi-card-text text-muted"></i> Keterangan Meja
                         </label>
-                        <input type="text"
-                               name="keterangan"
-                               class="form-control"
-                               placeholder="Masukkan keterangan (cth: Smoking area, dekat stopkontak)"
-                               value="{{ old('keterangan') }}">
+                        <input type="text" name="keterangan" class="form-control"
+                            placeholder="Masukkan keterangan (cth: Smoking area, dekat stopkontak)"
+                            value="{{ old('keterangan') }}">
                     </div>
                 </div>
 
@@ -201,4 +197,5 @@
     </main>
 
 </body>
+
 </html>
