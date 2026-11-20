@@ -573,81 +573,132 @@
 
         </div>
 
-<div class="table-card-header">
-    <div>
-        <h5 class="table-card-title">
-            <i class="bi bi-receipt me-2"></i>
-            Laporan Pendapatan
-        </h5>
 
-        <div class="table-card-subtitle">
-            Data pendapatan CafeKita
+
+
+
+{{-- LAPORAN PENDAPATAN --}}
+<div class="table-card mb-4">
+
+    {{-- HEADER --}}
+    <div class="table-card-header">
+
+        <div>
+            <h5 class="table-card-title">
+                <i class="bi bi-receipt me-2"></i>
+                Laporan Pendapatan
+            </h5>
+
+            <div class="table-card-subtitle">
+                Data pendapatan CafeKita
+            </div>
         </div>
+
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+
+            {{-- TOMBOL TUNAI --}}
+            <a href="{{ route('laporan.index', array_merge(request()->except('metode_pembayaran'), ['metode_pembayaran' => 'tunai'])) }}"
+               class="btn {{ $metodePembayaran === 'tunai' ? 'btn-cafe' : 'btn-reset' }}">
+                <i class="bi bi-cash me-1"></i>
+                Tunai
+            </a>
+
+            {{-- TOMBOL QRIS --}}
+            <a href="{{ route('laporan.index', array_merge(request()->except('metode_pembayaran'), ['metode_pembayaran' => 'qris'])) }}"
+               class="btn {{ $metodePembayaran === 'qris' ? 'btn-cafe' : 'btn-reset' }}">
+                <i class="bi bi-qr-code me-1"></i>
+                QRIS
+            </a>
+
+            {{-- TOTAL PENDAPATAN --}}
+            <span class="badge rounded-pill ms-2"
+                  style="background:#edf3ee;color:#304e3a;">
+                Rp {{ number_format($totalPendapatan, 0, ',', '.') }}
+            </span>
+
+        </div>
+
     </div>
 
-    <span class="badge rounded-pill"
-        style="background:#edf3ee;color:#304e3a;">
-        {{-- Ubah dari $totalPendapatan->sum('total_bayar') langsung ke variabel $totalPendapatan --}}
-        Rp {{ number_format($totalPendapatan, 0, ',', '.') }}
-    </span>
-</div>
-
-   <div class="table-card-body">
+    {{-- TABEL PENDAPATAN --}}
+    <div class="table-card-body">
 
         <div class="table-responsive">
 
             <table class="table align-middle">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>No. Transaksi</th>
-                                <th>Metode Pembayaran</th>
-                                <th>Total Pembayaran</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-        <tbody>
-    @forelse ($pembayarans as $item)
-        <tr>
-            <!-- No. Urut Otomatis -->
-            <td>{{ $loop->iteration }}</td>
 
-            <!-- Kolom No. Transaksi / Reservasi yang Diperbarui -->
-            <td>
-                <span class="number-green">
-                    @if($item->pemesanan)
-                        {{ $item->pemesanan->nomor_transaksi ?? $item->pemesanan->no_pemesanan ?? '-' }}
-                    @elseif($item->reservasi)
-                        {{ $item->reservasi->nomor_transaksi ?? $item->reservasi->no_reservasi ?? '-' }}
-                    @else
-                        -
-                    @endif
-                </span>
-            </td>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>No. Transaksi</th>
+                        <th>Metode Pembayaran</th>
+                        <th>Total Pembayaran</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
 
-            <!-- Metode Pembayaran -->
-            <td>{{ $item->metode_pembayaran }}</td>
+                <tbody>
 
-            <!-- Total Pembayaran (Format Rupiah) -->
-            <td>Rp {{ number_format($item->total_bayar, 0, ',', '.') }}</td>
+                    @forelse ($pembayarans as $item)
 
-            <!-- Status dengan Badge -->
-            <td>
-                <span class="badge rounded-pill" style="background: #edf3ee; color: #304e3a;">
-                    <i class="bi bi-check-circle me-1"></i> {{ $item->status }}
-                </span>
-            </td>
-        </tr>
-    @empty
-        <tr>
-            <td colspan="5" class="text-center text-muted py-3">
-                Belum ada data pembayaran
-            </td>
-        </tr>
-    @endforelse
-</tbody>
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+
+                            <td>
+                                <span class="number-green">
+                                    @if($item->pemesanan)
+                                        {{ $item->pemesanan->nomor_transaksi ?? $item->pemesanan->no_pemesanan ?? '-' }}
+                                    @elseif($item->reservasi)
+                                        {{ $item->reservasi->nomor_transaksi ?? $item->reservasi->no_reservasi ?? '-' }}
+                                    @else
+                                        -
+                                    @endif
+                                </span>
+                            </td>
+
+                            <td>
+                                {{ strtoupper($item->metode_pembayaran) }}
+                            </td>
+
+                            <td>
+                                <span class="money">
+                                    Rp {{ number_format($item->total_bayar, 0, ',', '.') }}
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="status-badge bg-success-subtle text-success">
+                                    <i class="bi bi-check-circle me-1"></i>
+                                    {{ ucfirst($item->status) }}
+                                </span>
+                            </td>
+                        </tr>
+
+                    @empty
+
+                        <tr>
+                            <td colspan="5" class="text-center py-5">
+                                <i class="bi bi-receipt"
+                                   style="font-size:35px;color:#d9b56d;"></i>
+
+                                <div class="mt-2 text-muted">
+                                    Belum ada data pembayaran.
+                                </div>
+                            </td>
+                        </tr>
+
+                    @endforelse
+
+                </tbody>
+
             </table>
+
+        </div>
+
+    </div>
+
 </div>
+
 </div>
 
 

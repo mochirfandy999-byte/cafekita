@@ -11,9 +11,15 @@ class LaporanController extends Controller
 {
     public function index(Request $request)
     {
-        // Ambil tanggal filter
+        // Ambil filter tanggal dan metode pembayaran
         $tanggalMulai = $request->tanggal_mulai;
         $tanggalSelesai = $request->tanggal_selesai;
+        $metodePembayaran = $request->query('metode_pembayaran');
+
+        // Validasi pilihan metode pembayaran
+        if (!in_array($metodePembayaran, ['tunai', 'qris'])) {
+            $metodePembayaran = null;
+        }
 
         // =========================
         // LAPORAN PEMESANAN
@@ -30,11 +36,11 @@ class LaporanController extends Controller
         }
 
         $pemesanans = $pemesananQuery->get();
-
-        // Total pemesanan
         $jumlahPemesanan = $pemesanans->count();
 
-        
+        // =========================
+        // LAPORAN RESERVASI
+        // =========================
         $reservasiQuery = Reservasi::with('meja')
             ->orderBy('tanggal_reservasi', 'desc')
             ->orderBy('jam_reservasi', 'desc');
@@ -49,14 +55,11 @@ class LaporanController extends Controller
 
         $reservasis = $reservasiQuery->get();
 
-        // Jumlah reservasi
         $jumlahReservasi = $reservasis->count();
 
-        // Reservasi selesai
         $reservasiSelesai = $reservasis
             ->where('status', 'selesai')
             ->count();
-
 
         // =========================
         // LAPORAN PEMBAYARAN / PENDAPATAN
@@ -64,6 +67,7 @@ class LaporanController extends Controller
         $pembayaranQuery = Pembayaran::with(['pemesanan', 'reservasi'])
             ->latest();
 
+        // Filter tanggal
         if ($tanggalMulai) {
             $pembayaranQuery->whereDate('created_at', '>=', $tanggalMulai);
         }
@@ -72,13 +76,21 @@ class LaporanController extends Controller
             $pembayaranQuery->whereDate('created_at', '<=', $tanggalSelesai);
         }
 
+        // Filter metode pembayaran: tunai atau qris
+        if ($metodePembayaran) {
+            $pembayaranQuery->where(
+                'metode_pembayaran',
+                $metodePembayaran
+            );
+        }
+
+        // Ambil daftar pembayaran sesuai filter
         $pembayarans = $pembayaranQuery->get();
 
-        // Total pendapatan dihitung dari total_bayar pembayaran yang lunas dan terfilter tanggal
+        // Total pendapatan hanya menghitung pembayaran lunas
         $totalPendapatan = (clone $pembayaranQuery)
             ->where('status', 'lunas')
             ->sum('total_bayar');
-
 
         return view('laporan.index', compact(
             'pemesanans',
@@ -89,7 +101,8 @@ class LaporanController extends Controller
             'jumlahReservasi',
             'reservasiSelesai',
             'tanggalMulai',
-            'tanggalSelesai'
+            'tanggalSelesai',
+            'metodePembayaran'
         ));
     }
 }
