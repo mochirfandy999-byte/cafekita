@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 
@@ -19,7 +20,7 @@
 
         body {
             margin: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
             background-color: var(--bg-body);
             color: #2c3e30;
             min-height: 100vh;
@@ -49,7 +50,6 @@
             align-items: center;
             justify-content: center;
             font-size: 24px;
-            box-shadow: 0 4px 12px rgba(31, 57, 41, 0.15);
             margin-bottom: 12px;
         }
 
@@ -65,7 +65,7 @@
         }
 
         .form-card {
-            background: #ffffff;
+            background: #fff;
             border-radius: 20px;
             border: 1px solid #eef2ee;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
@@ -86,12 +86,10 @@
             font-size: 14px;
             color: #2c3e30;
             background-color: #fdfdfd;
-            transition: all 0.2s ease;
         }
 
         .form-control:focus, .form-select:focus {
             border-color: #2e573d;
-            background-color: #ffffff;
             box-shadow: 0 0 0 3.5px rgba(46, 87, 61, 0.12);
         }
 
@@ -112,22 +110,17 @@
 
         .btn-cafe-primary {
             background: #1f3929;
-            color: #ffffff;
+            color: #fff;
             border: none;
             padding: 10px 22px;
             border-radius: 12px;
             font-size: 14px;
             font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s ease;
         }
 
         .btn-cafe-primary:hover {
             background: #284c36;
-            color: #ffffff;
-            transform: translateY(-1px);
+            color: #fff;
         }
 
         .btn-cafe-secondary {
@@ -139,20 +132,23 @@
             font-size: 14px;
             font-weight: 600;
             text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.2s ease;
         }
 
         .btn-cafe-secondary:hover {
             background: #e2e8e3;
             color: #2d3e32;
         }
+
+        .kode-info {
+            font-size: 11px;
+            color: #6d7f71;
+            margin-top: 5px;
+        }
     </style>
 </head>
 
 <body class="app-with-sidebar">
+
     @include('layouts.sidebar')
 
     <div class="main-container">
@@ -161,16 +157,14 @@
             <div class="brand-badge">
                 <i class="bi bi-cup-hot-fill"></i>
             </div>
+
             <h3 class="brand-title">Cafe<span>Kita</span></h3>
             <p class="text-muted small mb-0">Tambah Data Menu Baru</p>
         </div>
 
         @if($errors->any())
             <div class="alert alert-danger border-0 rounded-4 shadow-sm mb-4">
-                <div class="d-flex align-items-center mb-1">
-                    <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
-                    <strong class="fw-semibold">Periksa kembali data Anda:</strong>
-                </div>
+                <strong>Periksa kembali data Anda:</strong>
                 <ul class="mb-0 ps-3 small">
                     @foreach($errors->all() as $err)
                         <li>{{ $err }}</li>
@@ -180,103 +174,136 @@
         @endif
 
         <div class="form-card">
+
             <form action="{{ route('menus.store') }}" method="POST">
                 @csrf
 
                 <div class="row g-3">
 
+                    {{-- KODE MENU OTOMATIS --}}
                     <div class="col-md-6">
                         <label class="form-label">
-                            <i class="bi bi-upc-scan me-1 text-muted"></i> Kode Menu / ID Menu
+                            <i class="bi bi-upc-scan me-1"></i> Kode Menu
                         </label>
+
                         <input type="text"
-                               name="kode_menu"
+                            class="form-control"
+                            value="{{ $kodeMenu }}"
+                            readonly>
+
+                        <div class="kode-info">
+                            Kode dibuat otomatis ketika menu disimpan.
+                        </div>
+                    </div>
+
+                    {{-- KATEGORI --}}
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            <i class="bi bi-tags me-1"></i> Kategori Menu
+                        </label>
+
+                        <select name="kategori"
+                                id="kategori"
+                                class="form-select"
+                                required>
+
+                            <option value="">-- Pilih Kategori --</option>
+
+                            <option value="makanan"
+                                {{ old('kategori') == 'makanan' ? 'selected' : '' }}>
+                                Makanan
+                            </option>
+
+                            <option value="minuman"
+                                {{ old('kategori') == 'minuman' ? 'selected' : '' }}>
+                                Minuman
+                            </option>
+
+                        </select>
+                    </div>
+
+                    {{-- NAMA MENU MANUAL --}}
+                    <div class="col-12">
+                        <label class="form-label">
+                            <i class="bi bi-card-heading me-1"></i> Nama Menu
+                        </label>
+
+                        <input type="text"
+                               name="nama_menu"
                                class="form-control"
-                               placeholder="Contoh: MNU-001"
-                               value="{{ old('kode_menu') }}"
+                               placeholder="Masukkan nama makanan atau minuman"
+                               value="{{ old('nama_menu') }}"
+                               maxlength="255"
                                required>
                     </div>
 
-                    <div class="col-md-6">
+                    {{-- VARIAN --}}
+                    <div class="col-md-6"
+                         id="varian-container"
+                         style="display: none;">
+
                         <label class="form-label">
-                            <i class="bi bi-tags me-1 text-muted"></i> Kategori Menu
+                            <i class="bi bi-thermometer-half me-1"></i>
+                            Varian Minuman
                         </label>
-                        <select name="kategori" class="form-select" required>
-                            <option value="">-- Pilih Kategori --</option>
-                            <option value="makanan" {{ old('kategori') == 'makanan' ? 'selected' : '' }}>Makanan</option>
-                            <option value="minuman" {{ old('kategori') == 'minuman' ? 'selected' : '' }}>Minuman</option>
+
+                        <select name="varian"
+                                id="varian"
+                                class="form-select">
+
+                            <option value="">-- Pilih Varian --</option>
+
+                            <option value="ice"
+                                {{ old('varian') == 'ice' ? 'selected' : '' }}>
+                                Ice (Dingin)
+                            </option>
+
+                            <option value="hot"
+                                {{ old('varian') == 'hot' ? 'selected' : '' }}>
+                                Hot (Panas)
+                            </option>
+
                         </select>
                     </div>
 
-                    <div class="col-12">
-                        <label class="form-label">
-                            <i class="bi bi-card-heading me-1 text-muted"></i> Nama Menu
-                        </label>
-                        <select name="nama_menu" class="form-select" required>
-                            <option value="">-- Pilih Nama Menu --</option>
-                            
-                            <optgroup label="Minuman">
-                                <option value="Matcha" {{ old('nama_menu') == 'Matcha' ? 'selected' : '' }}>Matcha</option>
-                                <option value="Coklat" {{ old('nama_menu') == 'Coklat' ? 'selected' : '' }}>Coklat</option>
-                                <option value="Soda strawberry" {{ old('nama_menu') == 'Soda strawberry' ? 'selected' : '' }}>Soda strawberry</option>
-                                <option value="Soda lecy" {{ old('nama_menu') == 'Soda lecy' ? 'selected' : '' }}>Soda lecy</option>
-                                <option value="Jus apel" {{ old('nama_menu') == 'Jus apel' ? 'selected' : '' }}>Jus apel</option>
-                                <option value="Jus jeruk" {{ old('nama_menu') == 'Jus jeruk' ? 'selected' : '' }}>Jus jeruk</option>
-                                <option value="Lemon tea" {{ old('nama_menu') == 'Lemon tea' ? 'selected' : '' }}>Lemon tea</option>
-                                <option value="Yuzu" {{ old('nama_menu') == 'Yuzu' ? 'selected' : '' }}>Yuzu</option>
-                                <option value="Espresso" {{ old('nama_menu') == 'Espresso' ? 'selected' : '' }}>Espresso</option>
-                                <option value="Long black" {{ old('nama_menu') == 'Long black' ? 'selected' : '' }}>Long black</option>
-                            </optgroup>
-
-                            <optgroup label="Makanan">
-                                <option value="Tahu walik" {{ old('nama_menu') == 'Tahu walik' ? 'selected' : '' }}>Tahu walik</option>
-                                <option value="Kentang goreng" {{ old('nama_menu') == 'Kentang goreng' ? 'selected' : '' }}>Kentang goreng</option>
-                                <option value="Siomay" {{ old('nama_menu') == 'Siomay' ? 'selected' : '' }}>Siomay</option>
-                                <option value="Dimsum" {{ old('nama_menu') == 'Dimsum' ? 'selected' : '' }}>Dimsum</option>
-                                <option value="Mix platter" {{ old('nama_menu') == 'Mix platter' ? 'selected' : '' }}>Mix platter</option>
-                            </optgroup>
-                        </select>
-                    </div>
-
-                    {{-- Kolom Baru: Varian (Ice/Hot) --}}
+                    {{-- HARGA --}}
                     <div class="col-md-6">
                         <label class="form-label">
-                            <i class="bi bi-thermometer-half me-1 text-muted"></i> Varian (Opsional)
+                            <i class="bi bi-cash-stack me-1"></i> Harga Jual
                         </label>
-                        <select name="varian" class="form-select">
-                            <option value="">-- Tidak Ada Varian --</option>
-                            <option value="Ice" {{ old('varian') == 'Ice' ? 'selected' : '' }}>Ice (Dingin)</option>
-                            <option value="Hot" {{ old('varian') == 'Hot' ? 'selected' : '' }}>Hot (Panas)</option>
-                        </select>
-                    </div>
 
-                    {{-- Kolom Harga Jual disesuaikan lebarnya --}}
-                    <div class="col-md-6">
-                        <label class="form-label">
-                            <i class="bi bi-cash-stack me-1 text-muted"></i> Harga Jual
-                        </label>
                         <div class="input-group">
                             <span class="input-group-text">Rp</span>
-                            <input type="number"
+
+                            <input type="text"
                                    name="harga"
+                                   id="harga"
                                    class="form-control"
-                                   placeholder="Contoh: 18000"
-                                   min="0"
-                                   step="1"
+                                   placeholder="Contoh: 15.000"
+                                   inputmode="numeric"
+                                   autocomplete="off"
                                    value="{{ old('harga') }}"
                                    required>
+                        </div>
+
+                        <div class="kode-info">
+                            Gunakan angka saja, titik akan ditambahkan otomatis.
                         </div>
                     </div>
 
                 </div>
 
                 <div class="d-flex justify-content-end align-items-center gap-2 mt-4 pt-3 border-top">
-                    <a href="{{ route('menus.index') }}" class="btn-cafe-secondary">
+
+                    <a href="{{ route('menus.index') }}"
+                       class="btn-cafe-secondary">
                         <i class="bi bi-arrow-left"></i> Kembali
                     </a>
+
                     <button type="submit" class="btn-cafe-primary">
                         <i class="bi bi-floppy"></i> Simpan Menu
                     </button>
+
                 </div>
 
             </form>
@@ -285,6 +312,55 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
 
+    <script>
+        // Menampilkan varian berdasarkan kategori
+        const kategori = document.getElementById('kategori');
+        const varianContainer = document.getElementById('varian-container');
+        const varian = document.getElementById('varian');
+
+        function aturVarian() {
+            if (kategori.value === 'minuman') {
+
+                varianContainer.style.display = 'block';
+                varian.required = true;
+
+            } else {
+
+                varianContainer.style.display = 'none';
+                varian.required = false;
+                varian.value = '';
+
+            }
+        }
+
+        kategori.addEventListener('change', aturVarian);
+
+        // Menjalankan saat halaman pertama kali dibuka
+        aturVarian();
+
+
+        // Format harga Rupiah otomatis
+        const harga = document.getElementById('harga');
+
+        function formatRupiah(angka) {
+            const angkaBersih = angka.replace(/\D/g, '');
+
+            if (angkaBersih === '') {
+                return '';
+            }
+
+            return angkaBersih.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        }
+
+        harga.addEventListener('input', function () {
+            this.value = formatRupiah(this.value);
+        });
+
+        // Format kembali jika ada nilai lama
+        harga.value = formatRupiah(harga.value);
+
+    </script>
+
+</body>
 </html>

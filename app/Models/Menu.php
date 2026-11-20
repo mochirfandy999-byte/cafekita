@@ -15,6 +15,7 @@ class Menu extends Model
         'kode_menu',
         'nama_menu',
         'kategori',
-        'harga',
+        'varian',
+        'harga'
     ];
 }

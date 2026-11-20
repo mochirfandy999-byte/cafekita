@@ -92,6 +92,7 @@
                             <th class="text-muted fw-semibold text-uppercase px-4 py-3" style="font-size: 12px;">KODE MENU</th>
                             <th class="text-muted fw-semibold text-uppercase px-4 py-3" style="font-size: 12px;">NAMA MENU</th>
                             <th class="text-muted fw-semibold text-uppercase px-4 py-3" style="font-size: 12px;">KATEGORI</th>
+                            <th class="text-muted fw-semibold text-uppercase px-4 py-3" style="font-size: 12px;">VARIAN</th>
                             <th class="text-muted fw-semibold text-uppercase px-4 py-3" style="font-size: 12px;">HARGA</th>
                             <th class="text-muted fw-semibold text-uppercase px-4 py-3 text-center" style="font-size: 12px;">AKSI</th>
                         </tr>
@@ -110,6 +111,14 @@
                                     <span class="badge rounded-pill px-3 py-2" style="font-size: 11px; {{ $menu->kategori == 'makanan' ? 'background: #e8f5e9; color: #2e7d32;' : 'background: #e3f2fd; color: #1565c0;' }}">
                                         {{ ucfirst($menu->kategori) }}
                                     </span>
+                                </td>
+                                <td class="px-4 py-3"> @if($menu->kategori == 'minuman')
+                                    <span class="badge rounded-pill px-3 py-2" style="background: #e3f2fd; color: #1565c0;">
+                                        {{ strtoupper($menu->varian) }}
+                                    </span>
+                                    @else
+                                        <span class="text-muted">-</span>
+                                    @endif
                                 </td>
                                 <td class="px-4 py-3">
                                     <span class="fw-bold" style="color: #304e3a; font-size:13px;">
@@ -133,7 +142,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6">
+                                <td colspan="7">
                                     <div class="text-center py-5">
                                         <div class="d-flex justify-content-center align-items-center rounded-circle mx-auto mb-3" style="width: 60px; height: 60px; background: #edf3ee; color: #304e3a; font-size: 25px;">
                                             <i class="bi bi-journal-text"></i>
