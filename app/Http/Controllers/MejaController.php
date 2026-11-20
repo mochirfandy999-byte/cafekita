@@ -22,16 +22,30 @@ class MejaController extends Controller
      */
     public function create()
     {
-        return view('mejas.create');
+        // Ambil data meja terakhir berdasarkan ID atau nomor meja
+        $lastMeja = Meja::orderBy('id', 'desc')->first();
+
+        if (!$lastMeja) {
+            // Jika belum ada data sama sekali, mulai dari M01
+            $nomorOtomatis = 'M01';
+        } else {
+            // Ambil angka dari nomor meja terakhir (misal "M05" -> 5)
+            // Asumsi format selalu diawali 1 huruf ("M") diikuti angka
+            $lastNumber = (int) substr($lastMeja->nomor_meja, 1);
+            $nextNumber = $lastNumber + 1;
+
+            // Format ulang menjadi M01, M02, ... M10
+            $nomorOtomatis = 'M' . str_pad($nextNumber, 2, '0', STR_PAD_LEFT);
+        }
+
+        return view('mejas.create', compact('nomorOtomatis'));
     }
 
-    /**
-     * Menyimpan data meja baru
-     */
+
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nomor_meja' => 'required|string|max:50|unique:mejas,nomor_meja',
+            'nomor_meja' => 'required|max:50|unique:mejas,nomor_meja',
             'kapasitas' => 'required|integer|min:1',
             'status' => 'required|in:tersedia,terisi,reservasi',
             'keterangan' => 'nullable|string',
