@@ -26,15 +26,10 @@ class MejaController extends Controller
         $lastMeja = Meja::orderBy('id', 'desc')->first();
 
         if (!$lastMeja) {
-            // Jika belum ada data sama sekali, mulai dari M01
             $nomorOtomatis = 'M01';
         } else {
-            // Ambil angka dari nomor meja terakhir (misal "M05" -> 5)
-            // Asumsi format selalu diawali 1 huruf ("M") diikuti angka
             $lastNumber = (int) substr($lastMeja->nomor_meja, 1);
             $nextNumber = $lastNumber + 1;
-
-            // Format ulang menjadi M01, M02, ... M10
             $nomorOtomatis = 'M' . str_pad($nextNumber, 2, '0', STR_PAD_LEFT);
         }
 

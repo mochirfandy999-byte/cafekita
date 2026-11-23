@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -332,6 +333,7 @@
             .sidebar {
                 width: 210px;
             }
+
             .main-content {
                 margin-left: 210px;
             }
@@ -343,18 +345,22 @@
                 width: 100%;
                 height: auto;
             }
+
             .main-content {
                 margin-left: 0;
             }
+
             .topbar {
                 padding: 0 20px;
             }
+
             .page-content {
                 padding: 20px;
             }
         }
     </style>
 </head>
+
 <body class="app-with-sidebar">
     @include('layouts.sidebar')
 
@@ -380,7 +386,7 @@
                 </a>
             </li>
 
-            @if(auth()->check() && auth()->user()->role === 'kasir')
+            @if (auth()->check() && auth()->user()->role === 'kasir')
                 <li>
                     <a href="{{ route('mejas.index') }}" class="{{ request()->routeIs('mejas.*') ? 'active' : '' }}">
                         <i class="bi bi-grid-3x3-gap-fill"></i>
@@ -395,27 +401,30 @@
                 </li>
             @endif
 
-            @if(auth()->check() && in_array(auth()->user()->role, ['kasir', 'staff_dapur']))
+            @if (auth()->check() && in_array(auth()->user()->role, ['kasir', 'staff_dapur']))
                 <li>
-                    <a href="{{ route('pemesanans.index') }}" class="{{ request()->routeIs('pemesanans.*') ? 'active' : '' }}">
+                    <a href="{{ route('pemesanans.index') }}"
+                        class="{{ request()->routeIs('pemesanans.*') ? 'active' : '' }}">
                         <i class="bi bi-receipt-cutoff"></i>
                         <span>Pemesanan</span>
                     </a>
                 </li>
             @endif
 
-            @if(auth()->check() && auth()->user()->role === 'kasir')
+            @if (auth()->check() && auth()->user()->role === 'kasir')
                 <li>
-                    <a href="{{ route('reservasis.index') }}" class="{{ request()->routeIs('reservasis.*') ? 'active' : '' }}">
+                    <a href="{{ route('reservasis.index') }}"
+                        class="{{ request()->routeIs('reservasis.*') ? 'active' : '' }}">
                         <i class="bi bi-calendar-check-fill"></i>
                         <span>Reservasi</span>
                     </a>
                 </li>
             @endif
 
-            @if(auth()->check() && auth()->user()->role === 'manager')
+            @if (auth()->check() && auth()->user()->role === 'manager')
                 <li>
-                    <a href="{{ route('laporan.index') }}" class="{{ request()->routeIs('laporan.*') ? 'active' : '' }}">
+                    <a href="{{ route('laporan.index') }}"
+                        class="{{ request()->routeIs('laporan.*') ? 'active' : '' }}">
                         <i class="bi bi-bar-chart-fill"></i>
                         <span>Laporan</span>
                     </a>
@@ -444,7 +453,8 @@
                 </div>
                 <div class="user-info">
                     <span class="user-name">{{ auth()->check() ? auth()->user()->nama : 'Kasir CafeKita' }}</span>
-                    <span class="user-role">{{ auth()->check() ? str_replace('_', ' ', auth()->user()->role) : 'Kasir' }}</span>
+                    <span
+                        class="user-role">{{ auth()->check() ? str_replace('_', ' ', auth()->user()->role) : 'Kasir' }}</span>
                 </div>
             </div>
         </header>
@@ -486,12 +496,15 @@
                             <!-- Meja -->
                             <div class="col-md-6">
                                 <label class="form-label">Pilih Meja <span class="required">*</span></label>
-                                <select name="meja_id" class="form-select @error('meja_id') is-invalid @enderror" required>
+                                <select name="meja_id" class="form-select @error('meja_id') is-invalid @enderror"
+                                    required>
                                     <option value="">-- Pilih Meja --</option>
-                                    @if(isset($mejas))
-                                        @foreach($mejas as $meja)
-                                            <option value="{{ $meja->id }}" {{ old('meja_id', $reservasi->meja_id ?? '') == $meja->id ? 'selected' : '' }}>
-                                                Meja {{ $meja->nomor_meja ?? $meja->nomor }} (Kapasitas: {{ $meja->kapasitas }} Orang)
+                                    @if (isset($mejas))
+                                        @foreach ($mejas as $meja)
+                                            <option value="{{ $meja->id }}"
+                                                {{ old('meja_id', $reservasi->meja_id ?? '') == $meja->id ? 'selected' : '' }}>
+                                                Meja {{ $meja->nomor_meja ?? $meja->nomor }} (Kapasitas:
+                                                {{ $meja->kapasitas }} Orang)
                                             </option>
                                         @endforeach
                                     @endif
@@ -504,26 +517,30 @@
                             <!-- Nama Pelanggan -->
                             <div class="col-md-6">
                                 <label class="form-label">Nama Pelanggan <span class="required">*</span></label>
-                                <input type="text" name="nama_pelanggan" id="nama_pelanggan" class="form-control @error('nama_pelanggan') is-invalid @enderror" 
-                                value="{{ old('nama_pelanggan', $reservasi->nama_pelanggan ?? '') }}" placeholder="Contoh: Budi Santoso" required>
+                                <input type="text" name="nama_pelanggan" id="nama_pelanggan"
+                                    class="form-control @error('nama_pelanggan') is-invalid @enderror"
+                                    value="{{ old('nama_pelanggan', $reservasi->nama_pelanggan ?? '') }}"
+                                    placeholder="Contoh: Budi Santoso" required>
                                 @error('nama_pelanggan')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                                @if($reservasi)
-    <input type="hidden" name="reservasi_id" value="{{ $reservasi->id }}">
-@endif
+                                @if ($reservasi)
+                                    <input type="hidden" name="reservasi_id" value="{{ $reservasi->id }}">
+                                @endif
                             </div>
 
                             <!-- Catatan -->
                             <div class="col-12">
                                 <label class="form-label">Catatan Pesanan (Opsional)</label>
-                                <textarea name="catatan" rows="3" class="form-control" placeholder="Contoh: Kurangi gula, es batu dipisah, dll...">{{ old('catatan') }}</textarea>
+                                <textarea name="catatan" rows="3" class="form-control"
+                                    placeholder="Contoh: Kurangi gula, es batu dipisah, dll...">{{ old('catatan') }}</textarea>
                             </div>
 
                             <!-- Info Box -->
                             <div class="col-12">
                                 <div class="info-box">
-                                    <i class="bi bi-info-circle-fill me-1"></i> Setelah data pemesanan dibuat, Anda dapat menambahkan menu pesanan dan memproses pembayaran.
+                                    <i class="bi bi-info-circle-fill me-1"></i> Setelah data pemesanan dibuat, Anda
+                                    dapat menambahkan menu pesanan dan memproses pembayaran.
                                 </div>
                             </div>
 
@@ -531,8 +548,10 @@
                             <div class="col-12">
                                 <hr class="my-2 text-muted">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <label class="form-label mb-0 fs-6">Daftar Menu Pesanan <span class="required">*</span></label>
-                                    <button type="button" class="btn btn-sm btn-outline-success" id="btn-tambah-menu">
+                                    <label class="form-label mb-0 fs-6">Daftar Menu Pesanan <span
+                                            class="required">*</span></label>
+                                    <button type="button" class="btn btn-sm btn-outline-success"
+                                        id="btn-tambah-menu">
                                         <i class="bi bi-plus-circle me-1"></i> Tambah Menu
                                     </button>
                                 </div>
@@ -552,27 +571,37 @@
                                             <tr class="item-baris">
                                                 <td>
                                                     <select name="menu_id[]" class="form-select select-menu" required>
-                                                        <option value="" data-harga="0">-- Pilih Menu --</option>
-                                                        @if(isset($menus))
+                                                        <option value="" data-harga="0">-- Pilih Menu --
+                                                        </option>
+                                                        @if (isset($menus))
                                                             @foreach ($menus as $menu)
-                                                                <option value="{{ $menu->id }}" data-harga="{{ $menu->harga }}">
-                                                                    {{ $menu->nama_menu ?? $menu->nama }} (Rp {{ number_format($menu->harga, 0, ',', '.') }})
+                                                                <option value="{{ $menu->id }}"
+                                                                    data-harga="{{ $menu->harga }}">
+                                                                    {{ $menu->nama_menu ?? $menu->nama }} (Rp
+                                                                    {{ number_format($menu->harga, 0, ',', '.') }})
                                                                 </option>
                                                             @endforeach
                                                         @endif
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <input type="text" class="form-control bg-light harga-tampil" value="Rp 0" readonly>
+                                                    <input type="text" class="form-control bg-light harga-tampil"
+                                                        value="Rp 0" readonly>
                                                 </td>
                                                 <td>
-                                                    <input type="number" name="jumlah[]" class="form-control input-qty" value="1" min="1" required>
+                                                    <input type="number" name="jumlah[]"
+                                                        class="form-control input-qty" value="1" min="1"
+                                                        required>
                                                 </td>
                                                 <td>
-                                                    <input type="text" class="form-control bg-light fw-semibold subtotal-tampil" value="Rp 0" readonly>
+                                                    <input type="text"
+                                                        class="form-control bg-light fw-semibold subtotal-tampil"
+                                                        value="Rp 0" readonly>
                                                 </td>
                                                 <td class="text-center">
-                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-hapus" title="Hapus baris">
+                                                    <button type="button"
+                                                        class="btn btn-outline-danger btn-sm btn-hapus"
+                                                        title="Hapus baris">
                                                         <i class="bi bi-trash"></i>
                                                     </button>
                                                 </td>
@@ -586,53 +615,61 @@
                                     <span class="total-title">Total Pembayaran:</span>
                                     <div>
                                         <span class="total-amount" id="total-bayar-text">Rp 0</span>
-                                        <input type="hidden" name="total_bayar" id="total-bayar-hidden" value="0">
+                                        <input type="hidden" name="total_bayar" id="total-bayar-hidden"
+                                            value="0">
                                     </div>
                                 </div>
                             </div>
 
-<!-- Pilihan Metode Pembayaran -->
-<div class="card mb-3 p-3 border-0 shadow-sm mt-3">
-    <label class="form-label fw-bold">Metode Pembayaran <span class="text-danger">*</span></label>
-    <div class="d-flex gap-4 mb-3">
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="metode_pembayaran" id="metode_tunai" value="tunai" checked>
-            <label class="form-check-label fw-semibold" for="metode_tunai">
-                💵 Tunai (Cash)
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="metode_pembayaran" id="metode_qris" value="qris">
-            <label class="form-check-label fw-semibold" for="metode_qris">
-                📱 QRIS (Non-Tunai)
-            </label>
-        </div>
-    </div>
+                            <!-- Pilihan Metode Pembayaran -->
+                            <div class="card mb-3 p-3 border-0 shadow-sm mt-3">
+                                <label class="form-label fw-bold">Metode Pembayaran <span
+                                        class="text-danger">*</span></label>
+                                <div class="d-flex gap-4 mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="metode_pembayaran"
+                                            id="metode_tunai" value="tunai" checked>
+                                        <label class="form-check-label fw-semibold" for="metode_tunai">
+                                            💵 Tunai (Cash)
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="metode_pembayaran"
+                                            id="metode_qris" value="qris">
+                                        <label class="form-check-label fw-semibold" for="metode_qris">
+                                            📱 QRIS (Non-Tunai)
+                                        </label>
+                                    </div>
+                                </div>
 
-    <!-- Area Pembayaran Tunai -->
-    <div id="section-tunai" class="row g-3">
-        <div class="col-md-6">
-            <label for="uang_dibayar" class="form-label">Uang Diterima (Rp)</label>
-            <input type="number" class="form-control" id="uang_dibayar" name="uang_dibayar" placeholder="Contoh: 50000" min="0">
-        </div>
-        <div class="col-md-6">
-            <label for="kembalian" class="form-label">Kembalian (Rp)</label>
-            <input type="text" class="form-control bg-light" id="kembalian" name="kembalian" value="Rp 0" readonly>
-            <small id="pesan-kurang" class="text-danger d-none">Uang yang dibayarkan masih kurang!</small>
-        </div>
-    </div>
+                                <!-- Area Pembayaran Tunai -->
+                                <div id="section-tunai" class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="uang_dibayar" class="form-label">Uang Diterima (Rp)</label>
+                                        <input type="number" class="form-control" id="uang_dibayar"
+                                            name="uang_dibayar" placeholder="Contoh: 50000" min="0">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="kembalian" class="form-label">Kembalian (Rp)</label>
+                                        <input type="text" class="form-control bg-light" id="kembalian"
+                                            name="kembalian" value="Rp 0" readonly>
+                                        <small id="pesan-kurang" class="text-danger d-none">Uang yang dibayarkan masih
+                                            kurang!</small>
+                                    </div>
+                                </div>
 
-    <!-- Area Pembayaran QRIS -->
-    <div id="section-qris" class="d-none alert alert-info mb-0">
-        <div class="d-flex align-items-center">
-            <div class="me-3 fs-3">📲</div>
-            <div>
-                <strong>Pembayaran QRIS:</strong> Silakan scan QR code kasir sebesar nominal pas: 
-                <span class="badge bg-primary fs-6" id="qris-nominal">Rp 0</span>
-            </div>
-        </div>
-    </div>
-</div>
+                                <!-- Area Pembayaran QRIS -->
+                                <div id="section-qris" class="d-none alert alert-info mb-0">
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-3 fs-3">📲</div>
+                                        <div>
+                                            <strong>Pembayaran QRIS:</strong> Silakan scan QR code kasir sebesar nominal
+                                            pas:
+                                            <span class="badge bg-primary fs-6" id="qris-nominal">Rp 0</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <!-- Tombol Aksi -->
                             <div class="col-12 text-end pt-3">
@@ -652,7 +689,7 @@
 
     <!-- Script Perhitungan Otomatis & Penambahan Menu -->
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const menuContainer = document.getElementById('menu-container');
             const btnTambahMenu = document.getElementById('btn-tambah-menu');
             const totalBayarText = document.getElementById('total-bayar-text');
@@ -673,7 +710,8 @@
                     const subtotalTampil = baris.querySelector('.subtotal-tampil');
 
                     const selectedOption = selectMenu.options[selectMenu.selectedIndex];
-                    const harga = selectedOption ? (parseFloat(selectedOption.getAttribute('data-harga')) || 0) : 0;
+                    const harga = selectedOption ? (parseFloat(selectedOption.getAttribute('data-harga')) ||
+                        0) : 0;
                     const qty = parseInt(inputQty.value) || 0;
 
                     const subtotal = harga * qty;
@@ -687,20 +725,20 @@
                 totalBayarHidden.value = totalSemua;
             }
 
-            menuContainer.addEventListener('change', function (e) {
+            menuContainer.addEventListener('change', function(e) {
                 if (e.target.classList.contains('select-menu')) {
                     hitungTotal();
                 }
             });
 
-            menuContainer.addEventListener('input', function (e) {
+            menuContainer.addEventListener('input', function(e) {
                 if (e.target.classList.contains('input-qty')) {
                     if (e.target.value < 1 && e.target.value !== '') e.target.value = 1;
                     hitungTotal();
                 }
             });
 
-            menuContainer.addEventListener('click', function (e) {
+            menuContainer.addEventListener('click', function(e) {
                 const btnHapus = e.target.closest('.btn-hapus');
                 if (btnHapus) {
                     const baris = btnHapus.closest('.item-baris');
@@ -713,7 +751,7 @@
                 }
             });
 
-            btnTambahMenu.addEventListener('click', function () {
+            btnTambahMenu.addEventListener('click', function() {
                 const barisPertama = menuContainer.querySelector('.item-baris');
                 const barisBaru = barisPertama.cloneNode(true);
 
@@ -727,82 +765,83 @@
 
             hitungTotal();
         });
-        
-        document.addEventListener("DOMContentLoaded", function () {
-    const radioTunai = document.getElementById("metode_tunai");
-    const radioQris = document.getElementById("metode_qris");
-    const sectionTunai = document.getElementById("section-tunai");
-    const sectionQris = document.getElementById("section-qris");
-    const inputUangDibayar = document.getElementById("uang_dibayar");
-    const inputKembalian = document.getElementById("kembalian");
-    const pesanKurang = document.getElementById("pesan-kurang");
-    const labelQrisNominal = document.getElementById("qris-nominal");
 
-    // Fungsi membaca nilai Total Pembayaran saat ini
-    function getTotalBelanja() {
-    const totalElem = document.getElementById("total-bayar-text");
-    if (totalElem) {
-        // Ambil hanya digit angka dari teksnya
-        const angka = totalElem.innerText.replace(/[^0-9]/g, "");
-        return parseInt(angka, 10) || 0;
-    }
-    return 0;
-}
+        document.addEventListener("DOMContentLoaded", function() {
+            const radioTunai = document.getElementById("metode_tunai");
+            const radioQris = document.getElementById("metode_qris");
+            const sectionTunai = document.getElementById("section-tunai");
+            const sectionQris = document.getElementById("section-qris");
+            const inputUangDibayar = document.getElementById("uang_dibayar");
+            const inputKembalian = document.getElementById("kembalian");
+            const pesanKurang = document.getElementById("pesan-kurang");
+            const labelQrisNominal = document.getElementById("qris-nominal");
 
-    // Fungsi format rupiah
-    function formatRupiah(angka) {
-        return "Rp " + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    }
-
-    // Toggle tampilan saat metode pembayaran berganti
-    function switchMetode() {
-        const total = getTotalBelanja();
-        if (radioTunai.checked) {
-            sectionTunai.classList.remove("d-none");
-            sectionQris.classList.add("d-none");
-            hitungKembalian();
-        } else {
-            sectionTunai.classList.add("d-none");
-            sectionQris.classList.remove("d-none");
-            labelQrisNominal.innerText = formatRupiah(total);
-        }
-    }
-
-    // Logika hitung kembalian otomatis
-    function hitungKembalian() {
-        const total = getTotalBelanja();
-        const bayar = parseFloat(inputUangDibayar.value) || 0;
-        const selisih = bayar - total;
-
-        if (bayar === 0) {
-            inputKembalian.value = "Rp 0";
-            pesanKurang.classList.add("d-none");
-        } else if (selisih >= 0) {
-            inputKembalian.value = formatRupiah(selisih);
-            pesanKurang.classList.add("d-none");
-        } else {
-            inputKembalian.value = "- " + formatRupiah(Math.abs(selisih));
-            pesanKurang.classList.remove("d-none");
-        }
-    }
-
-    radioTunai.addEventListener("change", switchMetode);
-    radioQris.addEventListener("change", switchMetode);
-    inputUangDibayar.addEventListener("input", hitungKembalian);
-
-    // Panggil ulang jika ada penambahan/perubahan menu makanan
-    document.addEventListener("input", function(e) {
-        if (e.target.matches(".jumlah-menu, .select-menu, input[type='number']")) {
-            setTimeout(() => {
-                if (radioQris.checked) {
-                    labelQrisNominal.innerText = formatRupiah(getTotalBelanja());
-                } else {
-                    hitungKembalian();
+            // Fungsi membaca nilai Total Pembayaran saat ini
+            function getTotalBelanja() {
+                const totalElem = document.getElementById("total-bayar-text");
+                if (totalElem) {
+                    // Ambil hanya digit angka dari teksnya
+                    const angka = totalElem.innerText.replace(/[^0-9]/g, "");
+                    return parseInt(angka, 10) || 0;
                 }
-            }, 100);
-        }
-    });
-});
+                return 0;
+            }
+
+            // Fungsi format rupiah
+            function formatRupiah(angka) {
+                return "Rp " + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            }
+
+            // Toggle tampilan saat metode pembayaran berganti
+            function switchMetode() {
+                const total = getTotalBelanja();
+                if (radioTunai.checked) {
+                    sectionTunai.classList.remove("d-none");
+                    sectionQris.classList.add("d-none");
+                    hitungKembalian();
+                } else {
+                    sectionTunai.classList.add("d-none");
+                    sectionQris.classList.remove("d-none");
+                    labelQrisNominal.innerText = formatRupiah(total);
+                }
+            }
+
+            // Logika hitung kembalian otomatis
+            function hitungKembalian() {
+                const total = getTotalBelanja();
+                const bayar = parseFloat(inputUangDibayar.value) || 0;
+                const selisih = bayar - total;
+
+                if (bayar === 0) {
+                    inputKembalian.value = "Rp 0";
+                    pesanKurang.classList.add("d-none");
+                } else if (selisih >= 0) {
+                    inputKembalian.value = formatRupiah(selisih);
+                    pesanKurang.classList.add("d-none");
+                } else {
+                    inputKembalian.value = "- " + formatRupiah(Math.abs(selisih));
+                    pesanKurang.classList.remove("d-none");
+                }
+            }
+
+            radioTunai.addEventListener("change", switchMetode);
+            radioQris.addEventListener("change", switchMetode);
+            inputUangDibayar.addEventListener("input", hitungKembalian);
+
+            // Panggil ulang jika ada penambahan/perubahan menu makanan
+            document.addEventListener("input", function(e) {
+                if (e.target.matches(".jumlah-menu, .select-menu, input[type='number']")) {
+                    setTimeout(() => {
+                        if (radioQris.checked) {
+                            labelQrisNominal.innerText = formatRupiah(getTotalBelanja());
+                        } else {
+                            hitungKembalian();
+                        }
+                    }, 100);
+                }
+            });
+        });
     </script>
 </body>
+
 </html>
