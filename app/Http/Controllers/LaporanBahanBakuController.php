@@ -7,9 +7,6 @@ use Illuminate\Http\Request;
 
 class LaporanBahanBakuController extends Controller
 {
-    /**
-     * Menampilkan daftar stok bahan baku untuk diperiksa & dikelola Staff Dapur.
-     */
     public function index(Request $request)
     {
         $bahanBakus = BahanBaku::orderBy('id')->get();
@@ -18,10 +15,6 @@ class LaporanBahanBakuController extends Controller
         return view('laporan.bahan-baku', compact('bahanBakus', 'isKelolaMode'));
     }
 
-    /**
-     * Memvalidasi perubahan jumlah stok dan menyimpan ke database,
-     * lalu menampilkan pesan sukses untuk verifikasi ketersediaan stok.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([

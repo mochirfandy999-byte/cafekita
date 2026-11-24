@@ -14,90 +14,109 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
-    body {
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        background-color: #f7f9f7;
-        color: #2b2f32;
-    }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f7f9f7;
+            color: #2b2f32;
+        }
 
-    :root {
-        --cafe-primary: #2d503f;
-        --cafe-primary-hover: #223e31;
-        --cafe-border: #e3e8e5;
-    }
+        :root {
+            --cafe-primary: #2d503f;
+            --cafe-primary-hover: #223e31;
+            --cafe-border: #e3e8e5;
+        }
 
-    .btn-cafe-primary {
-        background-color: var(--cafe-primary);
-        color: #ffffff;
-        border: none;
-        padding: 9px 22px;
-        font-weight: 500;
-        border-radius: 10px;
-        transition: all 0.2s ease-in-out;
-    }
+        .btn-cafe-primary {
+            background-color: var(--cafe-primary);
+            color: #ffffff;
+            border: none;
+            padding: 9px 22px;
+            font-weight: 500;
+            border-radius: 10px;
+            transition: all 0.2s ease-in-out;
+        }
 
-    .btn-cafe-primary:hover {
-        background-color: var(--cafe-primary-hover);
-        color: #ffffff;
-        transform: translateY(-1px);
-    }
+        .btn-cafe-primary:hover {
+            background-color: var(--cafe-primary-hover);
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
 
-    .btn-cafe-outline {
-        border: 1.5px solid var(--cafe-primary);
-        color: var(--cafe-primary);
-        background: transparent;
-        font-weight: 500;
-        border-radius: 8px;
-        transition: all 0.2s;
-    }
+        .btn-cafe-outline {
+            border: 1.5px solid var(--cafe-primary);
+            color: var(--cafe-primary);
+            background: transparent;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
 
-    .btn-cafe-outline:hover {
-        background-color: var(--cafe-primary);
-        color: #ffffff;
-    }
+        .btn-cafe-outline:hover {
+            background-color: var(--cafe-primary);
+            color: #ffffff;
+        }
 
-    .form-control,
-    .form-select {
-        border-radius: 10px;
-        border: 1.5px solid var(--cafe-border);
-        padding: 9px 14px;
-        font-size: 0.95rem;
-        transition: all 0.2s;
-    }
+        .form-control,
+        .form-select {
+            border-radius: 10px;
+            border: 1.5px solid var(--cafe-border);
+            padding: 9px 14px;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
 
-    .form-control:focus,
-    .form-select:focus {
-        border-color: var(--cafe-primary);
-        box-shadow: 0 0 0 3px rgba(45, 80, 63, 0.15);
-    }
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--cafe-primary);
+            box-shadow: 0 0 0 3px rgba(45, 80, 63, 0.15);
+        }
 
-    .form-label {
-        font-size: 0.88rem;
-        font-weight: 600;
-        color: #495057;
-        margin-bottom: 6px;
-    }
+        .form-label {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 6px;
+        }
 
-    .card-custom {
-        border-radius: 16px;
-        border: 1px solid rgba(0, 0, 0, 0.04);
-        background: #ffffff;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-    }
+        .card-custom {
+            border-radius: 16px;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            background: #ffffff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
 
-    .section-box {
-        background-color: #fbfcfb;
-        border: 1px solid var(--cafe-border);
-        border-radius: 12px;
-        padding: 18px;
-    }
+        .section-box {
+            background-color: #fbfcfb;
+            border: 1px solid var(--cafe-border);
+            border-radius: 12px;
+            padding: 18px;
+        }
 
-    .profile-pill {
-        background: #ffffff;
-        border: 1px solid var(--cafe-border);
-        border-radius: 12px;
-        padding: 6px 14px;
-    }
+        .profile-pill {
+            background: #ffffff;
+            border: 1px solid var(--cafe-border);
+            border-radius: 12px;
+            padding: 6px 14px;
+        }
+
+        .total-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 10px;
+            border-top: 1px dashed var(--cafe-border);
+        }
+
+        .total-title {
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .total-amount {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--cafe-primary);
+        }
     </style>
 </head>
 
@@ -127,29 +146,29 @@
         </div>
 
         @if(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show rounded-3 border-0 shadow-sm mb-4" role="alert">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
+            <div class="alert alert-danger alert-dismissible fade show rounded-3 border-0 shadow-sm mb-4" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
         @endif
 
         @if($errors->any())
-        <div class="alert alert-danger alert-dismissible fade show rounded-3 border-0 shadow-sm mb-4" role="alert">
-            <div class="fw-bold mb-1"><i class="bi bi-exclamation-circle-fill me-2"></i> Terdapat kesalahan pengisian:
+            <div class="alert alert-danger alert-dismissible fade show rounded-3 border-0 shadow-sm mb-4" role="alert">
+                <div class="fw-bold mb-1"><i class="bi bi-exclamation-circle-fill me-2"></i> Terdapat kesalahan pengisian:
+                </div>
+                <ul class="mb-0 ps-3">
+                    @foreach ($errors->all() as $err)
+                        <li>{{ $err }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
-            <ul class="mb-0 ps-3">
-                @foreach ($errors->all() as $err)
-                <li>{{ $err }}</li>
-                @endforeach
-            </ul>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
         @endif
 
         <div class="card card-custom">
             <div class="card-body p-4 p-md-5">
 
-                <form action="{{ route('reservasis.store') }}" method="POST">
+                <form action="{{ route('reservasis.store') }}" method="POST" id="form-reservasi">
                     @csrf
 
                     <h6 class="fw-bold mb-3" style="color: var(--cafe-primary);">
@@ -174,11 +193,11 @@
                             <select name="meja_id" class="form-select" required>
                                 <option value="">-- Pilih Meja --</option>
                                 @forelse ($mejas as $m)
-                                <option value="{{ $m->id }}" {{ old('meja_id') == $m->id ? 'selected' : '' }}>
-                                    Meja {{ $m->nomor_meja }} (Kapasitas {{$m->kapasitas }} orang)
-                                </option>
+                                    <option value="{{ $m->id }}" {{ old('meja_id') == $m->id ? 'selected' : '' }}>
+                                        Meja {{ $m->nomor_meja }} (Kapasitas {{ $m->kapasitas }} orang)
+                                    </option>
                                 @empty
-                                <option value="" disabled>Tidak ada meja tersedia</option>
+                                    <option value="" disabled>Tidak ada meja tersedia</option>
                                 @endforelse
                             </select>
                         </div>
@@ -234,14 +253,13 @@
                                     <select name="menus[0][id]" class="form-select select-menu">
                                         <option value="" data-harga="0">-- Pilih Menu Makanan / Minuman --</option>
                                         @if(isset($menus))
-                                        @forelse ($menus as $item)
-                                        {{-- ATRIBUT data-harga WAJIB ADA DI SINI --}}
-                                        <option value="{{ $item->id }}" data-harga="{{ $item->harga }}">
-                                            {{ $item->nama_menu ?? $item->nama }} - Rp
-                                            {{ number_format($item->harga, 0, ',', '.') }}
-                                        </option>
-                                        @empty
-                                        @endforelse
+                                            @forelse ($menus as $item)
+                                                <option value="{{ $item->id }}" data-harga="{{ $item->harga }}">
+                                                    {{ $item->nama_menu ?? $item->nama }} - Rp
+                                                    {{ number_format($item->harga, 0, ',', '.') }}
+                                                </option>
+                                            @empty
+                                            @endforelse
                                         @endif
                                     </select>
                                 </div>
@@ -251,17 +269,17 @@
                                 </div>
                                 <div class="col-md-1">
                                     <button type="button" class="btn btn-danger btn-sm btn-hapus-menu" disabled>
-                                        <i class="fas fa-trash"></i>
+                                        <i class="bi bi-trash"></i>
                                     </button>
                                 </div>
                             </div>
                         </div>
 
                         <div class="total-box mt-2">
-                            <span class="total-title">Total Pembayaran:</span>
+                            <span class="total-title">Total Harga Menu:</span>
                             <div>
                                 <span class="total-amount" id="total-bayar-text">Rp 0</span>
-                                <input type="hidden" name="total_bayar" id="total-bayar-hidden" value="0">
+                                <input type="hidden" id="total-bayar-murni" value="0">
                             </div>
                         </div>
                     </div>
@@ -275,11 +293,11 @@
                     <hr class="my-4" style="border-color: var(--cafe-border);">
 
                     <!-- Pilihan Jenis Pembayaran (DP 50% atau Lunas) -->
-                    <div class="form-group mb-3">
-                        <label class="font-weight-bold">Jenis Pembayaran *</label>
+                    <div class="mb-3">
+                        <label class="form-label">Jenis Pembayaran <span class="text-danger">*</span></label>
                         <div class="d-flex gap-3">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name=" jenis_pembayaran_tipe"
+                                <input class="form-check-input" type="radio" name="jenis_pembayaran_tipe"
                                     id="tipe_lunas" value="lunas" checked>
                                 <label class="form-check-label" for="tipe_lunas">Langsung Lunas</label>
                             </div>
@@ -291,19 +309,16 @@
                         </div>
                     </div>
 
-
-                    <!-- Info Nominal yang Harus Dibayar (Berubah otomatis jika pilih DP 50%) -->
+                    <!-- Info Nominal yang Harus Dibayar -->
                     <div class="alert alert-info py-2 mb-3">
                         <strong>Jumlah yang Harus Dibayar: </strong>
-                        <span id="label-tagihan-teritory" class="font-weight-bold text-dark">Rp 95.000</span>
-                        <!-- Input hidden untuk total yang benar-benar ditagih ke kasir -->
+                        <span id="label-tagihan-teritory" class="fw-bold text-dark">Rp 0</span>
                         <input type="hidden" name="total_bayar" id="total-bayar-hidden" value="0">
-                        <input type="hidden" id="total-bayar-murni" value="0">
                     </div>
 
                     <!-- Metode Pembayaran -->
-                    <div class="form-group mb-3">
-                        <label class="font-weight-bold">Metode Pembayaran *</label>
+                    <div class="mb-3">
+                        <label class="form-label">Metode Pembayaran <span class="text-danger">*</span></label>
                         <div class="d-flex gap-3">
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="metode_pembayaran" id="tunai"
@@ -318,23 +333,24 @@
                         </div>
                     </div>
 
-                    <!-- Uang Diterima & Kembalian (Akan otomatis diatur lewat JS) -->
+                    <!-- Uang Dibayar & Kembalian -->
                     <div class="row mb-3" id="wrapper-uang-pembayaran">
                         <div class="col-md-6">
-                            <label for="uang_dibayar" class="form-label" id="label-uang-diterima">Uang Dibayar
+                            <label for="uang_dibayar_display" class="form-label" id="label-uang-diterima">Uang Dibayar
                                 (Rp)</label>
-                            <input type="number" class="form-control" id="uang_dibayar" name="uang_dibayar"
-                                placeholder="Contoh: 50000" value="0">
+                            <input type="text" inputmode="numeric" class="form-control" id="uang_dibayar_display"
+                                placeholder="Contoh: 50.000" value="0">
+                            <input type="hidden" id="uang_dibayar" name="uang_dibayar" value="0">
                         </div>
                         <div class="col-md-6" id="wrapper-kembalian">
-                            <label for="kembalian" class="form-label">Kembalian (Rp)</label>
+                            <label for="kembalian_text" class="form-label">Kembalian (Rp)</label>
                             <input type="text" class="form-control" id="kembalian_text" value="Rp 0" readonly>
                             <input type="hidden" name="kembalian" id="kembalian" value="0">
                         </div>
                     </div>
 
                     <!-- Area Pembayaran QRIS -->
-                    <div id="section-qris" class="d-none alert alert-info mb-0">
+                    <div id="section-qris" class="d-none alert alert-info mb-4">
                         <div class="d-flex align-items-center">
                             <div class="me-3 fs-3">📲</div>
                             <div>
@@ -343,179 +359,227 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{{ route('reservasis.index') }}" class="btn btn-light border px-4 py-2"
+                            style="border-radius: 10px; font-weight: 500;">
+                            <i class="bi bi-arrow-left me-1"></i> Kembali
+                        </a>
+                        <button type="submit" class="btn btn-cafe-primary px-4 py-2">
+                            <i class="bi bi-floppy me-1"></i> Simpan Reservasi
+                        </button>
+                    </div>
+
+                </form>
+
             </div>
-
-            <div class="d-flex justify-content-end gap-2">
-                <a href="{{ route('reservasis.index') }}" class="btn btn-light border px-4 py-2"
-                    style="border-radius: 10px; font-weight: 500;">
-                    <i class="bi bi-arrow-left me-1"></i> Kembali
-                </a>
-                <button type="submit" class="btn btn-cafe-primary px-4 py-2">
-                    <i class="bi bi-floppy me-1"></i> Simpan Reservasi
-                </button>
-            </div>
-
-            </form>
-
         </div>
-    </div>
 
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        let menuIndex = 1;
+        document.addEventListener('DOMContentLoaded', function () {
+            let menuIndex = 1;
 
-        const inputUangDibayar = document.getElementById('uang_diterima'); // ID input form kamu
-        const inputTotalBayarHidden = document.getElementById('total-bayar-hidden');
-        const inputTotalMurni = document.getElementById('total-bayar-murni'); // Pastikan input hidden ini ada
+            const formReservasi = document.getElementById('form-reservasi');
+            const inputUangDisplay = document.getElementById('uang_dibayar_display');
+            const inputUangHidden = document.getElementById('uang_dibayar');
+            const inputTotalBayarHidden = document.getElementById('total-bayar-hidden');
+            const inputTotalMurni = document.getElementById('total-bayar-murni');
 
-        const textTotalAtas = document.getElementById('total-bayar-text');
-        const labelTagihanBawah = document.getElementById('label-tagihan-teritory');
+            const textTotalAtas = document.getElementById('total-bayar-text');
+            const labelTagihanBawah = document.getElementById('label-tagihan-teritory');
 
-        const inputKembalian = document.getElementById('kembalian');
-        const textKembalian = document.getElementById('kembalian_text');
-        const wrapperKembalian = document.getElementById('wrapper-kembalian');
-        const labelUangDibayar = document.getElementById('label-uang-diterima');
+            const inputKembalian = document.getElementById('kembalian');
+            const textKembalian = document.getElementById('kembalian_text');
+            const wrapperKembalian = document.getElementById('wrapper-kembalian');
+            const wrapperUangPembayaran = document.getElementById('wrapper-uang-pembayaran');
+            const labelUangDibayar = document.getElementById('label-uang-diterima');
 
-        const radioLunas = document.getElementById('tipe_lunas');
-        const radioDp = document.getElementById('tipe_dp');
+            const radioLunas = document.getElementById('tipe_lunas');
+            const radioDp = document.getElementById('tipe_dp');
+            const radioTunai = document.getElementById('tunai');
+            const radioQris = document.getElementById('qris');
+            const sectionQris = document.getElementById('section-qris');
+            const qrisNominal = document.getElementById('qris-nominal');
 
-        // Fungsi Hitung Total Harga Menu
-        function hitungTotalPembayaran() {
-            let totalSemua = 0;
-            const barisMenus = document.querySelectorAll('#container-menu .baris-menu');
-
-            barisMenus.forEach(function(baris) {
-                const selectMenu = baris.querySelector('.select-menu');
-                const inputQty = baris.querySelector('.input-qty');
-
-                if (selectMenu && inputQty) {
-                    const selectedOption = selectMenu.options[selectMenu.selectedIndex];
-                    const hargaSatuan = parseFloat(selectedOption.getAttribute('data-harga')) || 0;
-                    const qty = parseInt(inputQty.value) || 0;
-
-                    totalSemua += (hargaSatuan * qty);
-                }
-            });
-
-            // Simpan ke input murni
-            if (inputTotalMurni) inputTotalMurni.value = totalSemua;
-
-            sesuaikanJenisPembayaran();
-        }
-
-        // Fungsi Atur Lunas atau DP 50%
-        function sesuaikanJenisPembayaran() {
-            let totalMurni = parseFloat(inputTotalMurni ? inputTotalMurni.value : 0) || 0;
-            let tagihanAkhir = totalMurni;
-
-            if (radioDp && radioDp.checked) {
-                tagihanAkhir = totalMurni / 2; // Bagi dua untuk DP 50%
-                if (labelUangDibayar) labelUangDibayar.textContent = "Uang DP Dibayar (Rp)";
-                if (wrapperKembalian) wrapperKembalian.style.display = 'none'; // Sembunyikan kembalian
-            } else {
-                if (labelUangDibayar) labelUangDibayar.textContent = "Uang Dibayar (Rp)";
-                if (wrapperKembalian) wrapperKembalian.style.display = 'block'; // Tampilkan kembalian
+            function parseAngka(val) {
+                const cleaned = String(val || '').replace(/\D/g, '');
+                return cleaned ? parseInt(cleaned, 10) : 0;
             }
 
-            // Update Teks Total di Atas
-            if (textTotalAtas) {
-                textTotalAtas.textContent = 'Rp ' + totalMurni.toLocaleString('id-ID');
+            function formatRibuan(angka) {
+                return (Number(angka) || 0).toLocaleString('id-ID');
             }
 
-            // Update Teks & Hidden di Kotak Biru Bawah
-            if (labelTagihanBawah) {
-                labelTagihanBawah.textContent = 'Rp ' + tagihanAkhir.toLocaleString('id-ID');
+            function hitungTotalPembayaran() {
+                let totalSemua = 0;
+                const barisMenus = document.querySelectorAll('#container-menu .baris-menu');
+
+                barisMenus.forEach(function (baris) {
+                    const selectMenu = baris.querySelector('.select-menu');
+                    const inputQty = baris.querySelector('.input-qty');
+
+                    if (selectMenu && inputQty) {
+                        const selectedOption = selectMenu.options[selectMenu.selectedIndex];
+                        const hargaSatuan = parseFloat(selectedOption.getAttribute('data-harga')) || 0;
+                        const qty = parseInt(inputQty.value, 10) || 0;
+
+                        totalSemua += (hargaSatuan * qty);
+                    }
+                });
+
+                if (inputTotalMurni) inputTotalMurni.value = totalSemua;
+                sesuaikanJenisPembayaran();
             }
-            if (inputTotalBayarHidden) {
-                inputTotalBayarHidden.value = tagihanAkhir;
-            }
 
-            hitungKembalian();
-        }
+            function sesuaikanMetodePembayaran() {
+                const totalBayar = parseFloat(inputTotalBayarHidden ? inputTotalBayarHidden.value : 0) || 0;
+                const isQris = radioQris && radioQris.checked;
 
-        // Fungsi Hitung Kembalian
-        function hitungKembalian() {
-            if (radioDp && radioDp.checked) return; // DP tidak ada kembalian
-
-            let totalBayar = parseFloat(inputTotalBayarHidden ? inputTotalBayarHidden.value : 0) || 0;
-            let uangDibayar = parseFloat(inputUangDibayar ? inputUangDibayar.value : 0) || 0;
-
-            let kembalian = uangDibayar - totalBayar;
-            if (kembalian < 0) kembalian = 0;
-
-            if (inputKembalian) inputKembalian.value = kembalian;
-            if (textKembalian) {
-                if (textKembalian.tagName === 'INPUT') {
-                    textKembalian.value = 'Rp ' + kembalian.toLocaleString('id-ID');
+                if (isQris) {
+                    if (sectionQris) sectionQris.classList.remove('d-none');
+                    if (qrisNominal) qrisNominal.textContent = 'Rp ' + formatRibuan(totalBayar);
+                    if (wrapperUangPembayaran) wrapperUangPembayaran.style.display = 'none';
+                    if (inputUangHidden) inputUangHidden.value = totalBayar;
+                    if (inputUangDisplay) inputUangDisplay.value = formatRibuan(totalBayar);
+                    if (inputKembalian) inputKembalian.value = 0;
+                    if (textKembalian) textKembalian.value = 'Rp 0';
                 } else {
-                    textKembalian.textContent = 'Rp ' + kembalian.toLocaleString('id-ID');
+                    if (sectionQris) sectionQris.classList.add('d-none');
+                    if (wrapperUangPembayaran) wrapperUangPembayaran.style.display = '';
+                    hitungKembalian();
                 }
             }
-        }
 
-        // Event Listeners
-        if (radioLunas) radioLunas.addEventListener('change', sesuaikanJenisPembayaran);
-        if (radioDp) radioDp.addEventListener('change', sesuaikanJenisPembayaran);
-        if (inputUangDibayar) inputUangDibayar.addEventListener('input', hitungKembalian);
+            function sesuaikanJenisPembayaran() {
+                const totalMurni = parseFloat(inputTotalMurni ? inputTotalMurni.value : 0) || 0;
+                let tagihanAkhir = totalMurni;
 
-        // Tombol Tambah Menu
-        const btnTambahMenu = document.getElementById('btn-tambah-menu');
-        if (btnTambahMenu) {
-            btnTambahMenu.addEventListener('click', function() {
-                const container = document.getElementById('container-menu');
-                const barisPertama = container.querySelector('.baris-menu');
-                const barisBaru = barisPertama.cloneNode(true);
-
-                const selectMenu = barisBaru.querySelector('.select-menu');
-                selectMenu.name = `menus[${menuIndex}][id]`;
-                selectMenu.selectedIndex = 0;
-
-                const inputQty = barisBaru.querySelector('.input-qty');
-                inputQty.name = `menus[${menuIndex}][jumlah]`;
-                inputQty.value = 1;
-
-                const tombolHapus = barisBaru.querySelector('.btn-hapus-menu');
-                if (tombolHapus) {
-                    tombolHapus.disabled = false;
-                    tombolHapus.addEventListener('click', function() {
-                        barisBaru.remove();
-                        hitungTotalPembayaran();
-                    });
+                if (radioDp && radioDp.checked) {
+                    tagihanAkhir = Math.round(totalMurni / 2);
+                    if (labelUangDibayar) labelUangDibayar.textContent = 'Uang DP Dibayar (Rp)';
+                    if (wrapperKembalian) wrapperKembalian.style.display = 'none';
+                } else {
+                    if (labelUangDibayar) labelUangDibayar.textContent = 'Uang Dibayar (Rp)';
+                    if (wrapperKembalian) wrapperKembalian.style.display = '';
                 }
 
-                selectMenu.addEventListener('change', hitungTotalPembayaran);
-                inputQty.addEventListener('input', hitungTotalPembayaran);
+                if (textTotalAtas) {
+                    textTotalAtas.textContent = 'Rp ' + formatRibuan(totalMurni);
+                }
 
-                container.appendChild(barisBaru);
-                menuIndex++;
-                hitungTotalPembayaran();
-            });
-        }
+                if (labelTagihanBawah) {
+                    labelTagihanBawah.textContent = 'Rp ' + formatRibuan(tagihanAkhir);
+                }
+                if (inputTotalBayarHidden) {
+                    inputTotalBayarHidden.value = tagihanAkhir;
+                }
 
-        // Inisialisasi baris menu awal
-        document.querySelectorAll('#container-menu .baris-menu').forEach(function(baris) {
-            const selectMenu = baris.querySelector('.select-menu');
-            const inputQty = baris.querySelector('.input-qty');
-            const tombolHapus = baris.querySelector('.btn-hapus-menu');
+                sesuaikanMetodePembayaran();
+            }
 
-            if (selectMenu) selectMenu.addEventListener('change', hitungTotalPembayaran);
-            if (inputQty) inputQty.addEventListener('input', hitungTotalPembayaran);
-            if (tombolHapus) {
-                tombolHapus.addEventListener('click', function() {
-                    if (document.querySelectorAll('#container-menu .baris-menu').length > 1) {
-                        baris.remove();
-                        hitungTotalPembayaran();
+            function hitungKembalian() {
+                const totalBayar = parseFloat(inputTotalBayarHidden ? inputTotalBayarHidden.value : 0) || 0;
+                const uangDibayar = parseAngka(inputUangDisplay ? inputUangDisplay.value : 0);
+
+                if (inputUangHidden) inputUangHidden.value = uangDibayar;
+
+                if (radioDp && radioDp.checked) {
+                    if (inputKembalian) inputKembalian.value = 0;
+                    if (textKembalian) textKembalian.value = 'Rp 0';
+                    return;
+                }
+
+                let kembalian = uangDibayar - totalBayar;
+                if (kembalian < 0) kembalian = 0;
+
+                if (inputKembalian) inputKembalian.value = kembalian;
+                if (textKembalian) {
+                    textKembalian.value = 'Rp ' + formatRibuan(kembalian);
+                }
+            }
+
+            if (inputUangDisplay) {
+                inputUangDisplay.addEventListener('input', function () {
+                    const angka = parseAngka(this.value);
+                    this.value = angka > 0 ? formatRibuan(angka) : '';
+                    hitungKembalian();
+                });
+
+                inputUangDisplay.addEventListener('blur', function () {
+                    const angka = parseAngka(this.value);
+                    this.value = formatRibuan(angka);
+                    hitungKembalian();
+                });
+            }
+
+            if (radioLunas) radioLunas.addEventListener('change', sesuaikanJenisPembayaran);
+            if (radioDp) radioDp.addEventListener('change', sesuaikanJenisPembayaran);
+            if (radioTunai) radioTunai.addEventListener('change', sesuaikanMetodePembayaran);
+            if (radioQris) radioQris.addEventListener('change', sesuaikanMetodePembayaran);
+
+            if (formReservasi) {
+                formReservasi.addEventListener('submit', function () {
+                    if (inputUangHidden && inputUangDisplay) {
+                        inputUangHidden.value = parseAngka(inputUangDisplay.value);
                     }
                 });
             }
-        });
 
-        // Jalankan saat pertama load
-        hitungTotalPembayaran();
-    });
+            const btnTambahMenu = document.getElementById('btn-tambah-menu');
+            if (btnTambahMenu) {
+                btnTambahMenu.addEventListener('click', function () {
+                    const container = document.getElementById('container-menu');
+                    const barisPertama = container.querySelector('.baris-menu');
+                    const barisBaru = barisPertama.cloneNode(true);
+
+                    const selectMenu = barisBaru.querySelector('.select-menu');
+                    selectMenu.name = `menus[${menuIndex}][id]`;
+                    selectMenu.selectedIndex = 0;
+
+                    const inputQty = barisBaru.querySelector('.input-qty');
+                    inputQty.name = `menus[${menuIndex}][jumlah]`;
+                    inputQty.value = 1;
+
+                    const tombolHapus = barisBaru.querySelector('.btn-hapus-menu');
+                    if (tombolHapus) {
+                        tombolHapus.disabled = false;
+                        tombolHapus.addEventListener('click', function () {
+                            barisBaru.remove();
+                            hitungTotalPembayaran();
+                        });
+                    }
+
+                    selectMenu.addEventListener('change', hitungTotalPembayaran);
+                    inputQty.addEventListener('input', hitungTotalPembayaran);
+
+                    container.appendChild(barisBaru);
+                    menuIndex++;
+                    hitungTotalPembayaran();
+                });
+            }
+
+            document.querySelectorAll('#container-menu .baris-menu').forEach(function (baris) {
+                const selectMenu = baris.querySelector('.select-menu');
+                const inputQty = baris.querySelector('.input-qty');
+                const tombolHapus = baris.querySelector('.btn-hapus-menu');
+
+                if (selectMenu) selectMenu.addEventListener('change', hitungTotalPembayaran);
+                if (inputQty) inputQty.addEventListener('input', hitungTotalPembayaran);
+                if (tombolHapus) {
+                    tombolHapus.addEventListener('click', function () {
+                        if (document.querySelectorAll('#container-menu .baris-menu').length > 1) {
+                            baris.remove();
+                            hitungTotalPembayaran();
+                        }
+                    });
+                }
+            });
+
+            hitungTotalPembayaran();
+        });
     </script>
 </body>
 
